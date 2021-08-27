@@ -25,4 +25,10 @@ object Versions {
     const val main = "2.38.1"
     const val compile = "2.38.1"
     const val navigation = "1.0.0-alpha03"
+
+    /**
+     * Retrofit + GSON
+     */
+
+    const val gson = "2.9.0"
 }

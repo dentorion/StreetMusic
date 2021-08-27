@@ -3,7 +3,7 @@
     package="com.example.streetmusic2">
 
     <application
-        android:name=".SMApplication"
+        android:name=".ui.application.SMApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StreetMusic2">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.StreetMusic2.NoActionBar">

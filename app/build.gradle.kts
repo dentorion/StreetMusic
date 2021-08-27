@@ -66,10 +66,14 @@ dependencies {
         androidTestImplementation (jUnitTestCompose)
     }
 
-    Dependencies.hilt.apply { // https://dagger.dev/hilt/
+    Dependencies.hilt.apply {
         implementation(main)
         kapt(compile)
         implementation(navigation)
+    }
+
+    Dependencies.retrofit.apply {
+        implementation(gson)
     }
 }
 
