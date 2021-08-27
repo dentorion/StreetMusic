@@ -12,7 +12,9 @@ import com.example.streetmusic2.ui.permissions.Permissions
 import com.example.streetmusic2.ui.permissions.PermissionsViewModel
 import com.example.streetmusic2.ui.start.StartScreen
 import com.example.streetmusic2.ui.start.StartScreenViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
+@ExperimentalPermissionsApi
 @Composable
 fun MainNavGraph(navController: NavHostController) {
 
@@ -32,7 +34,11 @@ fun MainNavGraph(navController: NavHostController) {
 
         composable("permissions") {
             val viewModel = hiltViewModel<PermissionsViewModel>()
-            Permissions(viewModel = viewModel)
+            Permissions(
+                viewModel = viewModel,
+                navToCityConcerts = actions.navigateToCityConcerts,
+                navToAuthorization = actions.navigateToAuthorization
+            )
         }
 
         composable("authorization") {

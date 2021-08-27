@@ -12,6 +12,7 @@ import com.example.streetmusic2.ui.navigation.MainNavGraph
 import com.example.streetmusic2.ui.theme.StreetMusic2Theme
 import com.example.streetmusic2.util.userpref.LocalUserPref
 import com.example.streetmusic2.util.userpref.UserSharedPreferences
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,6 +23,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userPrefs: UserSharedPreferences
 
+    @ExperimentalPermissionsApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

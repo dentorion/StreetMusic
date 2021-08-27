@@ -6,4 +6,6 @@ object Dependencies {
     val base = Base
     val hilt = Hilt
     val retrofit = Retrofit
+    val compose = Compose
+    val accompanist = Accompanist
 }

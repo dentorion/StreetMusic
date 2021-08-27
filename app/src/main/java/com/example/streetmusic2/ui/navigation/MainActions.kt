@@ -11,7 +11,7 @@ class MainActions(navController: NavHostController) {
     }
 
     val navigateToAuthorization: () -> Unit = {
-        NavScreen.Authorize.apply {
+        NavScreen.Authorization.apply {
             navController.navigate(this.route)
         }
     }

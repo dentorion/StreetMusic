@@ -31,4 +31,16 @@ object Versions {
      */
 
     const val gson = "2.9.0"
+
+    /**
+     * Compose
+     */
+
+
+
+    /**
+     * Accompanist
+     */
+
+    const val permissions = "0.16.1"
 }

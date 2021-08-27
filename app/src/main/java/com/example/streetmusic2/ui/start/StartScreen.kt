@@ -27,7 +27,7 @@ fun StartContent(
     state: State<Int>,
     navToPermissions: () -> Unit
 ) {
-    Log.i("MyMusic", "State : $state")
+    Log.i("MyMusic", "StartScreen State : $state")
     BackgroundImage()
     Column(
         modifier = Modifier.fillMaxSize()

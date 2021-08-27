@@ -75,6 +75,10 @@ dependencies {
     Dependencies.retrofit.apply {
         implementation(gson)
     }
+
+    Dependencies.accompanist.apply {
+        implementation(permissions)
+    }
 }
 
 kapt {
