@@ -17,4 +17,12 @@ object Versions {
     const val jUnitTest = "1.1.3"
     const val espresso = "3.4.0"
     const val jUnitTestCompose = "1.1.0-alpha02"
+
+    /**
+     * Versions
+     */
+
+    const val main = "2.38.1"
+    const val compile = "2.38.1"
+    const val navigation = "1.0.0-alpha03"
 }
