@@ -1,6 +1,11 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
+
+    // Hilt
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+
 }
 
 android {
@@ -60,4 +65,14 @@ dependencies {
         androidTestImplementation (espresso)
         androidTestImplementation (jUnitTestCompose)
     }
+
+    Dependencies.hilt.apply { // https://dagger.dev/hilt/
+        implementation(main)
+        kapt(compile)
+        implementation(navigation)
+    }
+}
+
+kapt {
+    correctErrorTypes = true
 }

@@ -1,7 +1,8 @@
 @file:Suppress("unused")
 
-import dependencies.Base
+import dependencies.*
 
 object Dependencies {
     val base = Base
+    val hilt = Hilt
 }
