@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk = 31
-    buildToolsVersion = "30.0.3"
+    compileSdk = Android.compileSdk
+    buildToolsVersion = Android.buildTools
 
     defaultConfig {
         applicationId = "com.example.streetmusic2"
-        minSdk = 24
-        targetSdk = 31
+        minSdk = Android.minSdk
+        targetSdk = Android.targetSdk
         versionCode = 1
         versionName = "1.0"
 
