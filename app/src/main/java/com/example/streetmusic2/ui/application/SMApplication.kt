@@ -1,4 +1,4 @@
-package com.example.streetmusic2
+package com.example.streetmusic2.ui.application
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
