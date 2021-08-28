@@ -1,15 +1,18 @@
 package com.example.streetmusic2.ui.permissions
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.streetmusic2.common.model.Concert
+import com.example.streetmusic2.common.model.MyResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class PermissionsViewModel @Inject constructor(): ViewModel() {
+class PermissionsViewModel @Inject constructor() : ViewModel() {
 
-    private val _state = MutableStateFlow<Int>(1)
-    val state = _state.asStateFlow()
+    var state by mutableStateOf(MyResponse.Load<Concert>())
+        private set
 
 }

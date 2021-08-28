@@ -5,11 +5,11 @@ import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.streetmusic2.common.model.Concert
+import com.example.streetmusic2.common.model.MyResponse
 import com.example.streetmusic2.ui.start.components.BackgroundImage
 import com.example.streetmusic2.ui.start.components.Logo
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -23,12 +23,11 @@ fun Permissions(
     navToCityConcerts: () -> Unit,
     navToAuthorization: () -> Unit
 ) {
-    val state = viewModel.state.collectAsState()
     val mapPermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_FINE_LOCATION
     )
     PermissionsContent(
-        state = state,
+        state = viewModel.state,
         navToCityConcerts = navToCityConcerts,
         navToAuthorization = navToAuthorization,
         mapPermission = mapPermissionState
@@ -38,7 +37,7 @@ fun Permissions(
 @ExperimentalPermissionsApi
 @Composable
 fun PermissionsContent(
-    state: State<Int>,
+    state: MyResponse<Concert>,
     navToCityConcerts: () -> Unit,
     navToAuthorization: () -> Unit,
     mapPermission: PermissionState,
@@ -71,7 +70,19 @@ fun PermissionsContent(
                 when {
                     mapPermission.hasPermission -> {
 
+                        when (state) {
+                            is MyResponse.Error -> {
 
+                            }
+
+                            is MyResponse.Load -> {
+
+                            }
+
+                            is MyResponse.Success -> {
+
+                            }
+                        }
 
                     }
 
