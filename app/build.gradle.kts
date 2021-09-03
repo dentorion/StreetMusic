@@ -5,6 +5,10 @@ plugins {
     // Hilt
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
+    // Secret
+    id("com.google.secrets_gradle_plugin") version ("0.4")
+    // Firebase
+    id("com.google.gms.google-services")
 
 }
 
@@ -54,11 +58,7 @@ dependencies {
         implementation (coreKtx)
         implementation (appcompat)
         implementation (material)
-        implementation (composeUi)
-        implementation (composeMaterial)
-        implementation (composeUiTooling)
         implementation (lifecycle)
-        implementation (composeActivity)
 
         testImplementation (jUnit)
         androidTestImplementation (jUnitTest)
@@ -76,9 +76,36 @@ dependencies {
         implementation(gson)
     }
 
+    Dependencies.compose.apply {
+        implementation (composeUi)
+        implementation (composeMaterial)
+        implementation (composeUiTooling)
+        implementation (composeActivity)
+    }
+
     Dependencies.accompanist.apply {
         implementation(permissions)
     }
+
+    Dependencies.map.apply {
+        implementation(gmsPlayServicesLocation)
+        implementation(places)
+        implementation(volley)
+    }
+
+    Dependencies.firebase.apply {
+        implementation(platform((bom)))
+        implementation(auth)
+        implementation(firestoreKtx)
+        implementation(coroutinePlayServices)
+    }
+
+    Dependencies.room.apply {
+        implementation(runtime)
+        implementation(ktx)
+        kapt(compiler)
+    }
+
 }
 
 kapt {

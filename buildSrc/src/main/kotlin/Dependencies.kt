@@ -8,4 +8,7 @@ object Dependencies {
     val retrofit = Retrofit
     val compose = Compose
     val accompanist = Accompanist
+    val map = Map
+    val firebase = Firebase
+    val room = Room
 }

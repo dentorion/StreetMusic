@@ -3,6 +3,7 @@ buildscript {
     val kotlinVersion = "1.5.10"
     val gradleVersion = "7.1.0-alpha05"
     val hiltVersion = "2.38.1"
+    val googleServicesVersion = "4.3.10"
 
     repositories {
         google()
@@ -12,6 +13,7 @@ buildscript {
         classpath ("com.android.tools.build:gradle:$gradleVersion")
         classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath ("com.google.dagger:hilt-android-gradle-plugin:$hiltVersion")
+        classpath ("com.google.gms:google-services:$googleServicesVersion")
 
 
         // NOTE: Do not place your application dependencies here; they belong

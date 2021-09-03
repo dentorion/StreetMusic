@@ -18,15 +18,14 @@ class UserSharedPreferences @Inject constructor(@ApplicationContext context: Con
     /**
      * User "listener" GET parameters
      */
-
     fun isMusician(): Boolean =
         pref.getBoolean("isMusician", false)
 
-    fun getLatitude(): Double =
-        pref.getFloat("latitude", 0f).toExactDouble()
+    fun getLatitude(): String =
+        pref.getFloat("latitude", 0f).toExactDouble().toString()
 
-    fun getLongitude(): Double =
-        pref.getFloat("longitude", 0f).toExactDouble()
+    fun getLongitude(): String =
+        pref.getFloat("longitude", 0f).toExactDouble().toString()
 
     fun getCity(): String? =
         pref.getString("city", "")
@@ -37,15 +36,14 @@ class UserSharedPreferences @Inject constructor(@ApplicationContext context: Con
     /**
      * User "listener" SET parameters
      */
-
     fun setIsMusician(value: Boolean) =
         pref.set("isMusician", value)
 
-    fun setLatitude(value: Double) =
-        pref.set("latitude", value.toExactFloat())
+    fun setLatitude(value: String) =
+        pref.set("latitude", value.toDouble().toExactFloat())
 
-    fun setLongitude(value: Double) =
-        pref.set("longitude", value.toExactFloat())
+    fun setLongitude(value: String) =
+        pref.set("longitude", value.toDouble().toExactFloat())
 
     fun setCity(value: String) =
         pref.set("city", value)
@@ -56,7 +54,6 @@ class UserSharedPreferences @Inject constructor(@ApplicationContext context: Con
     /**
      * User "musician" GET parameters
      */
-
     fun getId(): String? =
         pref.getString("id", "")
 
@@ -78,7 +75,6 @@ class UserSharedPreferences @Inject constructor(@ApplicationContext context: Con
     /**
      * User "musician" SET parameters
      */
-
     fun setId(value: String) =
         pref.set("id", value)
 

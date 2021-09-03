@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Street Music 2</string>
+
+    <!-- Permission -->
+    <string name="error_location">Error while getting location. Please try again later.</string>
+    <string name="need_permission">For correct work app need to get your location.</string>
+    <string name="why_question">WHY DO WE ASK THIS?</string>
+    <string name="localize_me">LOCALIZE ME</string>
+
+    <!-- Concerts city -->
+    <string name="no_concerts_in_city">Unfortunately, no concerts</string>
+    <string name="error">Unfortunately, error has happened</string>
+
 </resources>

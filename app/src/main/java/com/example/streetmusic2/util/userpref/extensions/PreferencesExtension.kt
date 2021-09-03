@@ -4,7 +4,10 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 
 @Suppress("UNCHECKED_CAST")
-inline operator fun <reified T : Any> SharedPreferences.get(key: String, defaultValue: T? = null): T {
+inline operator fun <reified T : Any> SharedPreferences.get(
+    key: String,
+    defaultValue: T? = null
+): T {
     return when (T::class) {
         Boolean::class -> getBoolean(key, defaultValue as? Boolean? ?: false) as T
         Float::class -> getFloat(key, defaultValue as? Float? ?: 0.0f) as T
@@ -23,7 +26,10 @@ inline operator fun <reified T : Any> SharedPreferences.get(key: String, default
 }
 
 @Suppress("UNCHECKED_CAST")
-inline operator fun <reified T : Any> SharedPreferences.set(key: String, value: T) {
+inline operator fun <reified T : Any> SharedPreferences.set(
+    key: String,
+    value: T
+) {
     with(edit()) {
         when (T::class) {
             Boolean::class -> putBoolean(key, value as Boolean)

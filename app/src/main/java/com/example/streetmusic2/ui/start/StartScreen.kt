@@ -1,6 +1,5 @@
 package com.example.streetmusic2.ui.start
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -27,7 +26,6 @@ fun StartContent(
     state: State<Int>,
     navToPermissions: () -> Unit
 ) {
-    Log.i("MyMusic", "StartScreen State : $state")
     BackgroundImage()
     Column(
         modifier = Modifier.fillMaxSize()

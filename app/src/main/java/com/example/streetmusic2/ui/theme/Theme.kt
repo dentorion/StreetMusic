@@ -12,8 +12,8 @@ private val DarkColorPalette = darkColors(
     primary = Purple,
     primaryVariant = Purple,
 
-    secondary = Sky,
-    secondaryVariant = Sky,
+    secondary = White,
+    secondaryVariant = Grey,
 
     background = White,
     surface = White,
@@ -31,8 +31,8 @@ private val LightColorPalette = lightColors(
     primary = Purple,
     primaryVariant = Purple,
 
-    secondary = Sky,
-    secondaryVariant = Sky,
+    secondary = White,
+    secondaryVariant = Grey,
 
     background = White,
     surface = White,

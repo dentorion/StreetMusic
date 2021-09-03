@@ -19,7 +19,7 @@ object Versions {
     const val jUnitTestCompose = "1.1.0-alpha02"
 
     /**
-     * Versions
+     * Hilt
      */
 
     const val main = "2.38.1"
@@ -43,4 +43,25 @@ object Versions {
      */
 
     const val permissions = "0.16.1"
+
+    /**
+     * Map
+     */
+
+    const val places = "2.4.0"
+    const val volley = "1.2.0"
+
+    /**
+     * Firebase
+     */
+
+    const val bom = "28.3.1"
+    const val firebaseKtx = "23.0.3"
+    const val coroutines = "1.5.1"
+
+    /**
+     * Room
+     */
+
+    const val room = "2.3.0"
 }
