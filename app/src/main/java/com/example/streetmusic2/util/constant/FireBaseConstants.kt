@@ -7,6 +7,9 @@ const val CONCERTS_COLLECTION: String = "concerts"
 // Fire base document's field "id"
 const val FILED_ID: String = "id"
 
+// Fire base document's field "artist_id"
+const val FILED_ARTIST_ID: String = "artist_id"
+
 // Firebase document's field "name"
 const val FILED_NAME_OF_GROUP: String = "name_group"
 

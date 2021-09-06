@@ -17,7 +17,8 @@ fun SortStyleFinishedActualConcertsByCity(
     onFAClick: (Boolean) -> Unit,
     mode: Boolean,
     modifier: Modifier,
-    actualFAStyle: Boolean
+    actualFAStyle: Boolean,
+    enabled: Boolean
 ) {
     var border: BorderStroke? = null
     if (actualFAStyle && mode) {
@@ -43,7 +44,8 @@ fun SortStyleFinishedActualConcertsByCity(
             backgroundColor = MaterialTheme.colors.surface,
             contentColor = MaterialTheme.colors.onSurface
         ),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        enabled = enabled
     ) {
         Text(
             text = if (mode) {

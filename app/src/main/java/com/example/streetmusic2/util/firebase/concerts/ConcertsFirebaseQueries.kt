@@ -1,4 +1,4 @@
-package com.example.streetmusic2.util.firebase
+package com.example.streetmusic2.util.firebase.concerts
 
 import com.example.streetmusic2.common.model.Concert
 import com.example.streetmusic2.util.constant.*
@@ -84,7 +84,7 @@ class ConcertsFirebaseQueries @Inject constructor(
 
     private fun toDomainModel(qds: QueryDocumentSnapshot): Concert =
         Concert(
-            id = qds.getField<Int>(FILED_ID) ?: (5..1000000).random(),
+            artistId = qds.getField<Int>(FILED_ARTIST_ID) ?: 0,
             name = qds.getString(FILED_NAME_OF_GROUP) ?: "",
             city = qds.getString(FILED_CITY) ?: "",
             country = qds.getString(FILED_COUNTRY) ?: "",

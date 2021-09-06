@@ -4,9 +4,9 @@ import androidx.navigation.NavHostController
 
 class MainActions(navController: NavHostController) {
 
-    val navigateToMusicianPage: () -> Unit = {
-        NavScreen.MusicianPage.apply {
-            navController.navigate(this.route)
+    val navigateToMusicianPage: (Int) -> Unit = { artistId: Int ->
+        NavScreen.Artist.apply {
+            navController.navigate(routeWithArgument.replace("{$argument0}", artistId.toString()))
         }
     }
 

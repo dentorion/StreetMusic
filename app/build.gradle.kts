@@ -81,6 +81,8 @@ dependencies {
         implementation (composeMaterial)
         implementation (composeUiTooling)
         implementation (composeActivity)
+
+        implementation(composeCoil)
     }
 
     Dependencies.accompanist.apply {
@@ -105,7 +107,6 @@ dependencies {
         implementation(ktx)
         kapt(compiler)
     }
-
 }
 
 kapt {

@@ -9,7 +9,7 @@ data class Concert(
     val country: String = "",
     val city: String = "",
 
-    val id: Int = 0,
+    val artistId: Int = 0,
     val name: String = "",
     val avatar: String = "",
     val styleMusic: String = "",

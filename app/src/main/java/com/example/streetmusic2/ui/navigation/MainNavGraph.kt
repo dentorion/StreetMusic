@@ -4,13 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
+import com.example.streetmusic2.ui.artist.PersonalPage
+import com.example.streetmusic2.ui.artist.PersonalPageViewModel
 import com.example.streetmusic2.ui.authorizate.Authorize
 import com.example.streetmusic2.ui.authorizate.AuthorizeViewModel
 import com.example.streetmusic2.ui.cityconcerts.CityConcerts
 import com.example.streetmusic2.ui.cityconcerts.CityConcertsViewModel
-import com.example.streetmusic2.ui.musician.PersonalPage
 import com.example.streetmusic2.ui.permissions.Permissions
 import com.example.streetmusic2.ui.permissions.PermissionsViewModel
 import com.example.streetmusic2.ui.start.StartScreen
@@ -46,11 +49,6 @@ fun MainNavGraph(navController: NavHostController) {
             )
         }
 
-        composable(NavScreen.Authorization.route) {
-            val viewModel = hiltViewModel<AuthorizeViewModel>()
-            Authorize(viewModel = viewModel)
-        }
-
         composable(NavScreen.CityConcerts.route) {
             val viewModel = hiltViewModel<CityConcertsViewModel>()
             CityConcerts(
@@ -59,8 +57,22 @@ fun MainNavGraph(navController: NavHostController) {
             )
         }
 
-        composable(NavScreen.MusicianPage.route) {
-            PersonalPage()
+        composable(
+            route = NavScreen.Artist.routeWithArgument,
+            arguments = listOf(navArgument(NavScreen.Artist.argument0) { type = NavType.LongType })
+        ) { backStackEntry ->
+            backStackEntry.arguments?.let {
+                val viewModel = hiltViewModel<PersonalPageViewModel>()
+                PersonalPage(
+                    artistId = it.getLong(NavScreen.Artist.argument0),
+                    viewModel = viewModel
+                )
+            }
+        }
+
+        composable(NavScreen.Authorization.route) {
+            val viewModel = hiltViewModel<AuthorizeViewModel>()
+            Authorize(viewModel = viewModel)
         }
     }
 }

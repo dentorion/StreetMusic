@@ -20,7 +20,8 @@ fun SortStyleButton(
     style: MusicStyle,
     onStyleClicked: (String) -> Unit,
     actual: String,
-    modifier: Modifier
+    modifier: Modifier,
+    enabled: Boolean
 ) {
     var nameStyleChoice = ""
     var iconStyleChoice = 0
@@ -51,7 +52,7 @@ fun SortStyleButton(
             iconStyleChoice = R.drawable.ic_vocal_music
         }
     }
-    Content(nameStyleChoice, iconStyleChoice, border, modifier, onStyleClicked)
+    Content(nameStyleChoice, iconStyleChoice, border, modifier, onStyleClicked, enabled)
 }
 
 @Composable
@@ -60,7 +61,8 @@ private fun Content(
     iconStyleChoice: Int,
     border: BorderStroke?,
     modifier: Modifier,
-    onStyleClicked: (String) -> Unit
+    onStyleClicked: (String) -> Unit,
+    enabled: Boolean
 ) {
     OutlinedButton(
         modifier = modifier
@@ -72,7 +74,8 @@ private fun Content(
             backgroundColor = MaterialTheme.colors.surface,
             contentColor = MaterialTheme.colors.onSurface
         ),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        enabled = enabled
     ) {
         Image(
             modifier = Modifier

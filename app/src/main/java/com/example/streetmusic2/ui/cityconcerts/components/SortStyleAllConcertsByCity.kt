@@ -14,7 +14,12 @@ import androidx.compose.ui.unit.dp
 import java.util.*
 
 @Composable
-fun SortStyleAllConcertsByCity(userCity: String, onAllClick: () -> Unit, actualAllStyle: Boolean) {
+fun SortStyleAllConcertsByCity(
+    userCity: String,
+    onAllClick: () -> Unit,
+    actualAllStyle: Boolean,
+    enabled: Boolean
+) {
     OutlinedButton(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +37,8 @@ fun SortStyleAllConcertsByCity(userCity: String, onAllClick: () -> Unit, actualA
             backgroundColor = MaterialTheme.colors.surface,
             contentColor = MaterialTheme.colors.onSurface
         ),
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        enabled = enabled
     ) {
         Text(
             text = "All concerts in " + userCity.uppercase(Locale.getDefault()),

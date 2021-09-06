@@ -18,14 +18,14 @@ import com.example.streetmusic2.R
 import com.example.streetmusic2.common.model.Concert
 import com.example.streetmusic2.common.model.MyResponse
 import com.example.streetmusic2.ui.cityconcerts.components.*
-import com.example.streetmusic2.ui.permissions.components.ShowConcertsRecycler
+import com.example.streetmusic2.ui.permissions.components.ConcertsRecyclerView
 import com.example.streetmusic2.util.constant.MusicStyle
 import com.example.streetmusic2.util.userpref.LocalUserPref
 
 @Composable
 fun CityConcerts(
     viewModel: CityConcertsViewModel,
-    navToMusicianPage: () -> Unit
+    navToMusicianPage: (Int) -> Unit
 ) {
     val userCity = LocalUserPref.current.getCity() ?: ""
 
@@ -58,7 +58,7 @@ fun CityConcertsContent(
     state: MyResponse<List<Concert>>,
     context: Context,
     userCity: String,
-    navToMusicianPage: () -> Unit,
+    navToMusicianPage: (Int) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -84,7 +84,12 @@ fun CityConcertsContent(
                 is MyResponse.Error -> Error()
                 is MyResponse.Initial -> Initial(getAllConcerts)
                 is MyResponse.Load -> Load()
-                is MyResponse.Success -> Success(state, context, onHeartClick, navToMusicianPage)
+                is MyResponse.Success -> Success(
+                    state = state,
+                    context = context,
+                    onHeartClick = onHeartClick,
+                    navToMusicianPage = navToMusicianPage
+                )
             }
         }
         /**
@@ -106,51 +111,76 @@ fun CityConcertsContent(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 12.dp),
             ) {
+                val isButtonEnabled = when (state) {
+                    is MyResponse.Success -> true
+                    else -> false
+                }
+                /**
+                 * Styles buttons
+                 */
                 Row {
                     SortStyleButton(
                         style = MusicStyle.Rock(),
                         onStyleClicked = onStyleClick,
                         actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = isButtonEnabled
                     )
                     SortStyleButton(
                         style = MusicStyle.Classic(),
                         onStyleClicked = onStyleClick,
                         actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = isButtonEnabled
                     )
                     SortStyleButton(
                         style = MusicStyle.Dancing(),
                         onStyleClicked = onStyleClick,
                         actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = isButtonEnabled
                     )
                     SortStyleButton(
                         style = MusicStyle.Pop(),
                         onStyleClicked = onStyleClick,
                         actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = isButtonEnabled
                     )
                     SortStyleButton(
                         style = MusicStyle.Vocal(),
                         onStyleClicked = onStyleClick,
                         actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = isButtonEnabled
                     )
                 }
-                SortStyleAllConcertsByCity(userCity, onAllClick, actualAllStyle)
+                /**
+                 * All styles button
+                 */
+                SortStyleAllConcertsByCity(
+                    userCity = userCity,
+                    onAllClick = onAllClick,
+                    actualAllStyle = actualAllStyle,
+                    enabled = isButtonEnabled
+                )
+                /**
+                 * F/A buttons
+                 */
                 Row {
                     SortStyleFinishedActualConcertsByCity(
                         onFAClick = onFAClick,
                         mode = false,
                         modifier = Modifier.weight(1f),
-                        actualFAStyle = actualFAStyle
+                        actualFAStyle = actualFAStyle,
+                        enabled = isButtonEnabled
                     )
                     SortStyleFinishedActualConcertsByCity(
                         onFAClick = onFAClick,
                         mode = true,
                         modifier = Modifier.weight(1f),
-                        actualFAStyle = actualFAStyle
+                        actualFAStyle = actualFAStyle,
+                        enabled = isButtonEnabled
                     )
                 }
             }
@@ -163,13 +193,13 @@ private fun Success(
     state: MyResponse.Success<List<Concert>>,
     context: Context,
     onHeartClick: (Int) -> Unit,
-    navToMusicianPage: () -> Unit
+    navToMusicianPage: (Int) -> Unit
 ) {
-    ShowConcertsRecycler(
+    ConcertsRecyclerView(
         data = state.data,
         context = context,
         onHeartClick = onHeartClick,
-        navToMusicianPage = navToMusicianPage
+        navToMusicianPage = navToMusicianPage,
     )
 }
 

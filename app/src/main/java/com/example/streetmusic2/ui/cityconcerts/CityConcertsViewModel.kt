@@ -9,7 +9,7 @@ import com.example.streetmusic2.common.model.Concert
 import com.example.streetmusic2.common.model.FavouriteArtist
 import com.example.streetmusic2.common.model.MyResponse
 import com.example.streetmusic2.util.checkfavourite.ArtistsFavouriteRoom
-import com.example.streetmusic2.util.firebase.ConcertsFirebaseQueries
+import com.example.streetmusic2.util.firebase.concerts.ConcertsFirebaseQueries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,9 +25,16 @@ class CityConcertsViewModel @Inject constructor(
     var stateConcerts: MyResponse<List<Concert>> by mutableStateOf(MyResponse.Initial())
         private set
 
+    // Style button
     private var switchStyle by mutableStateOf(false)
+
+    // All styles button
     var switchAll by mutableStateOf(true)
+
+    // Finished / Active button
     var switchFA by mutableStateOf(true)
+
+    // Name of selected style button
     var style by mutableStateOf("")
 
     /**
@@ -91,15 +98,13 @@ class CityConcertsViewModel @Inject constructor(
     /**
      * Save / Del favourite artists
      */
-    fun clickHeart(id: Int) = viewModelScope.launch {
+    fun clickHeart(artistId: Int) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            if (artistFavouriteRoom.checkFavouriteById(id)) {
-                artistFavouriteRoom.delFavourite(id = id)
+            if (artistFavouriteRoom.checkFavouriteById(artistId)) {
+                artistFavouriteRoom.delFavourite(artistId = artistId)
             } else {
                 artistFavouriteRoom.addFavourite(
-                    FavouriteArtist(
-                        idArtist = id
-                    )
+                    FavouriteArtist(idArtist = artistId)
                 )
             }
         }
@@ -113,7 +118,7 @@ class CityConcertsViewModel @Inject constructor(
         val concerts = concertsFirebaseQueries.getConcertsActualCity(city)
         withContext(Dispatchers.IO) {
             concerts.onEach {
-                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.id)
+                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.artistId)
             }
         }
         stateConcerts = MyResponse.Success(concerts)
@@ -127,7 +132,7 @@ class CityConcertsViewModel @Inject constructor(
         val concerts = concertsFirebaseQueries.getConcertsExpiredCity(city)
         withContext(Dispatchers.IO) {
             concerts.onEach {
-                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.id)
+                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.artistId)
             }
         }
         stateConcerts = MyResponse.Success(concerts)
@@ -141,7 +146,7 @@ class CityConcertsViewModel @Inject constructor(
         val concerts = concertsFirebaseQueries.getConcertsActualCityStyle(city, style)
         withContext(Dispatchers.IO) {
             concerts.onEach {
-                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.id)
+                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.artistId)
             }
         }
         stateConcerts = MyResponse.Success(concerts)
@@ -155,7 +160,7 @@ class CityConcertsViewModel @Inject constructor(
         val concerts = concertsFirebaseQueries.getConcertsExpiredCityStyle(city, style)
         withContext(Dispatchers.IO) {
             concerts.onEach {
-                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.id)
+                it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.artistId)
             }
         }
         stateConcerts = MyResponse.Success(concerts)

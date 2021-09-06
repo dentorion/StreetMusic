@@ -12,14 +12,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.streetmusic2.R
 import com.example.streetmusic2.common.model.Concert
-import com.example.streetmusic2.ui.cityconcerts.components.MessageRow
+import com.example.streetmusic2.ui.cityconcerts.components.ConcertRow
 
 @Composable
-fun ShowConcertsRecycler(
+fun ConcertsRecyclerView(
     data: List<Concert>,
     context: Context,
     onHeartClick: (Int) -> Unit,
-    navToMusicianPage: () -> Unit
+    navToMusicianPage: (Int) -> Unit,
 ) {
     if (data.isEmpty()) {
         Text(
@@ -31,11 +31,11 @@ fun ShowConcertsRecycler(
     } else {
         LazyColumn {
             items(data) { concert ->
-                MessageRow(
+                ConcertRow(
                     context = context,
                     concert = concert,
-                    onHeartClick = { onHeartClick(concert.id) },
-                    navToMusicianPage = navToMusicianPage
+                    onHeartClick = { onHeartClick(concert.artistId) },
+                    navToMusicianPage = { navToMusicianPage(concert.artistId) }
                 )
             }
         }

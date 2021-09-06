@@ -12,4 +12,6 @@ object Compose {
 
     const val composeActivity = "androidx.activity:activity-compose:${Versions.composeActivity}"
 
+    const val composeCoil = "io.coil-kt:coil-compose:${Versions.composeCoil}"
+
 }

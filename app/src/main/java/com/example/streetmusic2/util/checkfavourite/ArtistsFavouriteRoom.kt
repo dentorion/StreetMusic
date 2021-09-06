@@ -11,21 +11,18 @@ class ArtistsFavouriteRoom @Inject constructor(
     /**
      * Check if artist in favourite list by his id
      */
-    fun checkFavouriteById(id: Int): Boolean {
-        return streetMusicDAO.checkArtistFavourite(id = id)
-    }
+    fun checkFavouriteById(artistId: Int): Boolean =
+        streetMusicDAO.checkArtistFavourite(artistId = artistId)
 
     /**
      * Add artist to favourite
      */
-    suspend fun addFavourite(favouriteArtist: FavouriteArtist) {
+    suspend fun addFavourite(favouriteArtist: FavouriteArtist) =
         streetMusicDAO.addFavourite(favouriteArtist = favouriteArtist)
-    }
 
     /**
      * Delete artist from favourite
      */
-    suspend fun delFavourite(id: Int) {
-        streetMusicDAO.deleteFavourite(id = id)
-    }
+    suspend fun delFavourite(artistId: Int) =
+        streetMusicDAO.deleteFavourite(artistId = artistId)
 }
