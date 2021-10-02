@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Denys/AndroidStudioProjects/StreetMusic2/app/src/main/res/drawable/ic_avatar_upload.xml" value="0.19" />
+        <entry key="..\:/Users/Denys/AndroidStudioProjects/StreetMusic2/app/src/main/res/drawable/ic_exit_user.xml" value="0.1" />
         <entry key="..\:/Users/Denys/AndroidStudioProjects/StreetMusic2/app/src/main/res/drawable/ic_like_unchecked.xml" value="0.1535" />
+        <entry key="..\:/Users/Denys/AndroidStudioProjects/StreetMusic2/app/src/main/res/drawable/ic_map.xml" value="0.1" />
+        <entry key="..\:/Users/Denys/AndroidStudioProjects/StreetMusic2/app/src/main/res/drawable/ic_star.xml" value="0.1" />
       </map>
     </option>
   </component>

@@ -24,7 +24,7 @@ fun SortStyleAllConcertsByCity(
         modifier = Modifier
             .fillMaxWidth()
             .height(55.dp)
-            .padding(6.dp),
+            .padding(bottom = 10.dp),
         border = if (actualAllStyle) {
             BorderStroke(4.dp, MaterialTheme.colors.primary)
         } else {

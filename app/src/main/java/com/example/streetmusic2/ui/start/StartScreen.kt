@@ -1,9 +1,8 @@
 package com.example.streetmusic2.ui.start
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -14,44 +13,37 @@ import com.example.streetmusic2.ui.start.components.MusicianButton
 
 @Composable
 fun StartScreen(
-    viewModel: StartScreenViewModel,
-    navToPermissions: () -> Unit
+    navToPermissions: () -> Unit,
 ) {
-    val state = viewModel.state.collectAsState()
-    StartContent(state, navToPermissions)
+    Log.i("MyMusic", "5.StartScreen")
+    StartContent(navToPermissions = navToPermissions)
 }
 
 @Composable
-fun StartContent(
-    state: State<Int>,
-    navToPermissions: () -> Unit
-) {
-    BackgroundImage()
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter
+fun StartContent(navToPermissions: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        BackgroundImage()
+
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 15.dp)
+                .padding(vertical = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Logo()
-        }
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Column(
+            Box(modifier = Modifier.weight(8f), contentAlignment = Alignment.Center) {
+                Logo()
+            }
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 42.dp)
+                    .weight(2f),
+                contentAlignment = Alignment.TopCenter
             ) {
-                FindMusicButton(navToPermissions = navToPermissions)
-                MusicianButton(navToPermissions = navToPermissions)
+                Column {
+                    FindMusicButton(navToPermissions = navToPermissions)
+                    MusicianButton(navToPermissions = navToPermissions)
+                }
             }
         }
     }

@@ -11,15 +11,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.Concert
+import com.example.streetmusic2.common.model.concert.ConcertDomain
 import com.example.streetmusic2.ui.cityconcerts.components.ConcertRow
 
 @Composable
 fun ConcertsRecyclerView(
-    data: List<Concert>,
+    data: List<ConcertDomain>,
     context: Context,
-    onHeartClick: (Int) -> Unit,
-    navToMusicianPage: (Int) -> Unit,
+    onHeartClick: (String) -> Unit,
+    navToArtistPage: (String) -> Unit,
 ) {
     if (data.isEmpty()) {
         Text(
@@ -33,9 +33,9 @@ fun ConcertsRecyclerView(
             items(data) { concert ->
                 ConcertRow(
                     context = context,
-                    concert = concert,
+                    concertDomain = concert,
                     onHeartClick = { onHeartClick(concert.artistId) },
-                    navToMusicianPage = { navToMusicianPage(concert.artistId) }
+                    navToMusicianPage = { navToArtistPage(concert.artistId) }
                 )
             }
         }

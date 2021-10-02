@@ -3,36 +3,44 @@ package com.example.streetmusic2.util.constant
 // Firebase collection named "concerts"
 const val CONCERTS_COLLECTION: String = "concerts"
 
+// 1 HOUR in mls
+const val HOUR_ONE_MLS: Long = 3600000L
 
-// Fire base document's field "id"
-const val FILED_ID: String = "id"
 
-// Fire base document's field "artist_id"
-const val FILED_ARTIST_ID: String = "artist_id"
+// Fire base document's fields
 
-// Firebase document's field "name"
-const val FILED_NAME_OF_GROUP: String = "name_group"
+// "artist_id"
+const val FIELD_ARTIST_ID: String = "artistId"
 
-// Firebase document's field "city"
-const val FILED_CITY: String = "city"
+// "name band"
+const val FIELD_NAME_OF_GROUP: String = "name"
 
-// Firebase document's field "name"
-const val FILED_COUNTRY: String = "country"
+// "city"
+const val FIELD_CITY: String = "city"
 
-// Firebase document's field "city"
-const val FILED_LATITUDE: String = "latitude"
+// "country"
+const val FIELD_COUNTRY: String = "country"
 
-// Firebase document's field "name"
-const val FILED_LONGITUDE: String = "longitude"
+// "latitude"
+const val FIELD_LATITUDE: String = "latitude"
 
-// Firebase document's field "city"
-const val FILED_AVATAR: String = "avatar"
+// "longitude"
+const val FIELD_LONGITUDE: String = "longitude"
 
-// Firebase document's field "name"
-const val FILED_STYLE: String = "style_music"
+// "avatar"
+const val FIELD_AVATAR: String = "avatar"
 
-// Fire base document's field "time_start"
-const val FILED_START: String = "time_start"
+// "style_music"
+const val FIELD_STYLE: String = "styleMusic"
 
-// Fire base document's field "time_stop"
-const val FILED_STOP: String = "time_stop"
+// "address_concert"
+const val FIELD_ADDRESS: String = "address"
+
+// "description_concert"
+const val FIELD_DESCRIPTION = "description"
+
+// "time_start"
+const val FIELD_START: String = "timeStart"
+
+// "time_stop"
+const val FIELD_STOP: String = "timeStop"

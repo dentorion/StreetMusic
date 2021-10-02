@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.streetmusic2.util.constant.FIND_MUSIC
 import com.example.streetmusic2.util.userpref.LocalUserPref
 
 @Composable
@@ -18,8 +19,7 @@ fun FindMusicButton(navToPermissions: () -> Unit) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .height(55.dp)
-            .padding(bottom = 16.dp),
+            .padding(vertical = 5.dp),
         onClick = {
             userPref.setIsMusician(false)
             navToPermissions()
@@ -31,7 +31,7 @@ fun FindMusicButton(navToPermissions: () -> Unit) {
         shape = MaterialTheme.shapes.medium
     ) {
         Text(
-            text = "FIND GOOD STREET MUSIC",
+            text = FIND_MUSIC,
             style = MaterialTheme.typography.button
         )
     }

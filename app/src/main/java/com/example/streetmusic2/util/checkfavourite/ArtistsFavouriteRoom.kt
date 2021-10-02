@@ -1,6 +1,6 @@
 package com.example.streetmusic2.util.checkfavourite
 
-import com.example.streetmusic2.common.model.FavouriteArtist
+import com.example.streetmusic2.common.model.favourite.FavouriteArtist
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ class ArtistsFavouriteRoom @Inject constructor(
     /**
      * Check if artist in favourite list by his id
      */
-    fun checkFavouriteById(artistId: Int): Boolean =
+    fun checkFavouriteById(artistId: String): Boolean =
         streetMusicDAO.checkArtistFavourite(artistId = artistId)
 
     /**
@@ -23,6 +23,6 @@ class ArtistsFavouriteRoom @Inject constructor(
     /**
      * Delete artist from favourite
      */
-    suspend fun delFavourite(artistId: Int) =
+    suspend fun delFavourite(artistId: String) =
         streetMusicDAO.deleteFavourite(artistId = artistId)
 }

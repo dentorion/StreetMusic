@@ -13,54 +13,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.streetmusic2.common.model.Concert
+import com.example.streetmusic2.common.model.concert.ConcertDomain
 
 @Composable
 fun ConcertRow(
     context: Context,
-    concert: Concert,
+    concertDomain: ConcertDomain,
     onHeartClick: () -> Unit,
     navToMusicianPage: () -> Unit,
 ) {
-    var isFavourite: Boolean by rememberSaveable { mutableStateOf(concert.isFavourite) }
+    var isFavourite: Boolean by rememberSaveable { mutableStateOf(concertDomain.isFavourite) }
     Row(
         modifier = Modifier
             .padding(vertical = 16.dp)
             .clickable { navToMusicianPage() }
             .fillMaxWidth()
-            .height(61.dp),
+            .height(61.dp)
+            .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(modifier = Modifier.weight(3.0f)) {
-            Text(
-                text = concert.name,
-                modifier = Modifier.padding(start = 12.dp),
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Box(modifier = Modifier.weight(1.0f), contentAlignment = Alignment.Center) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box {
-                    MusicStyleIcon(concert.styleMusic)
-                }
-                Box {
-                    Text(
-                        text = "${concert.playingTimeMinutes} min",
-                        fontSize = 10.sp,
-                        color = Color.Gray,
-                    )
-                }
-            }
-        }
-
+        /**
+         * Like icon
+         */
         Box(
             modifier = Modifier
                 .weight(1.0f)
@@ -74,16 +50,38 @@ fun ConcertRow(
         ) {
             IconFavourite(isFavouriteIcon = isFavourite)
         }
-
+        /**
+         * Title Artist Band name
+         */
+        Box(modifier = Modifier.weight(5f).padding(start = 5.dp)) {
+            Row {
+                Text(
+                    text = concertDomain.name,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+        /**
+         * Style music of concert
+         */
         Box(
             modifier = Modifier
                 .weight(1.0f)
                 .fillMaxHeight()
-                .clip(CircleShape)
-                .clickable {  },
+                .clip(CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            MapIcon(context, concert)
+            MusicStyleIcon(concertDomain.styleMusic)
+        }
+
+        /**
+         * Map icon
+         */
+        Box(
+            modifier = Modifier.weight(1.0f),
+            contentAlignment = Alignment.Center
+        ) {
+            MapIcon(context, concertDomain)
         }
     }
 }

@@ -31,4 +31,10 @@ object Firebase {
 
     const val coroutinePlayServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
 
+    /**
+     * Analytics
+     */
+    const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:${Versions.crashlytics}"
+    const val analytics = "com.google.firebase:firebase-analytics-ktx:${Versions.analytics}"
+
 }

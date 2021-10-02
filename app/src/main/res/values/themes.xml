@@ -18,8 +18,4 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="Theme.StreetMusic2.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.StreetMusic2.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

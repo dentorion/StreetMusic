@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Street Music 2</string>
 
+    <string name="facebook_app_id">564028241414184</string>
+    <string name="fb_login_protocol_scheme">fb564028241414184</string>
+
     <!-- Permission -->
     <string name="error_location">Error while getting location. Please try again later.</string>
     <string name="need_permission">For correct work app need to get your location.</string>
@@ -10,5 +13,11 @@
     <!-- Concerts city -->
     <string name="no_concerts_in_city">Unfortunately, no concerts</string>
     <string name="error">Unfortunately, error has happened</string>
+
+    <!-- Pre Concert -->
+    <string name="error_pre_concert">Error happened. Please try again later.</string>
+
+    <string name="dialog_ok_concert">OK</string>
+    <string name="main_text">Give us more information please!</string>
 
 </resources>

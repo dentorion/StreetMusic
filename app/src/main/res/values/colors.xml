@@ -10,4 +10,6 @@
 
     <color name="gradientUp">#8960EF</color>
     <color name="gradientBottom">#AE65FC</color>
+
+    <color name="descriptionConcertBack">#673AB7</color>
 </resources>

@@ -1,34 +1,46 @@
 package com.example.streetmusic2.ui.cityconcerts
 
 import android.content.Context
+import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.Concert
-import com.example.streetmusic2.common.model.MyResponse
-import com.example.streetmusic2.ui.cityconcerts.components.*
+import com.example.streetmusic2.common.model.concert.ConcertDomain
+import com.example.streetmusic2.common.model.music.MusicStyle
+import com.example.streetmusic2.common.model.responce.CommonResponse
+import com.example.streetmusic2.ui.cityconcerts.components.SortStyleAllConcertsByCity
+import com.example.streetmusic2.ui.cityconcerts.components.SortStyleFinishedActualConcertsByCity
 import com.example.streetmusic2.ui.permissions.components.ConcertsRecyclerView
-import com.example.streetmusic2.util.constant.MusicStyle
+import com.example.streetmusic2.ui.preconcert.components.StyleMusicButtons
 import com.example.streetmusic2.util.userpref.LocalUserPref
+import com.google.accompanist.insets.navigationBarsPadding
+import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun CityConcerts(
-    viewModel: CityConcertsViewModel,
-    navToMusicianPage: (Int) -> Unit
+    viewModel: CityConcertsViewModel = hiltViewModel(),
+    navToArtistPage: (String) -> Unit
 ) {
-    val userCity = LocalUserPref.current.getCity() ?: ""
+    Log.i("MyMusic", "6.CityConcerts")
 
+    val userCity = LocalUserPref.current.getCity()
     CityConcertsContent(
         getAllConcerts = { viewModel.initialStart(userCity) },
         onHeartClick = { viewModel.clickHeart(it) },
@@ -41,35 +53,36 @@ fun CityConcerts(
         state = viewModel.stateConcerts,
         context = LocalContext.current,
         userCity = userCity,
-        navToMusicianPage = navToMusicianPage
+        navToArtistPage = navToArtistPage
     )
 }
 
 @Composable
 fun CityConcertsContent(
     getAllConcerts: () -> Unit,
-    onHeartClick: (Int) -> Unit,
-    onStyleClick: (String) -> Unit,
+    onHeartClick: (String) -> Unit,
+    onStyleClick: (MusicStyle) -> Unit,
     onAllClick: () -> Unit,
     onFAClick: (Boolean) -> Unit,
-    actualChoiceStyle: String,
+    actualChoiceStyle: MusicStyle,
     actualFAStyle: Boolean,
     actualAllStyle: Boolean,
-    state: MyResponse<List<Concert>>,
+    state: CommonResponse<List<ConcertDomain>>,
     context: Context,
     userCity: String,
-    navToMusicianPage: (Int) -> Unit,
+    navToArtistPage: (String) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Log.i("MyMusic", "6.CityConcertsContent")
+
+    Column {
         /**
-         * Head part of Recycler List of concerts
+         * Recycler List of concerts
          */
         Box(
             modifier = Modifier
-                .weight(2.0f)
-                .fillMaxSize()
+                .statusBarsPadding()
+                .fillMaxWidth()
+                .weight(1f)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
@@ -81,80 +94,51 @@ fun CityConcertsContent(
             contentAlignment = Alignment.BottomCenter
         ) {
             when (state) {
-                is MyResponse.Error -> Error()
-                is MyResponse.Initial -> Initial(getAllConcerts)
-                is MyResponse.Load -> Load()
-                is MyResponse.Success -> Success(
+                is CommonResponse.Error -> Error()
+                is CommonResponse.Initial -> Initial(getAllConcerts)
+                is CommonResponse.Load -> Load()
+                is CommonResponse.Success -> Success(
                     state = state,
                     context = context,
                     onHeartClick = onHeartClick,
-                    navToMusicianPage = navToMusicianPage
+                    navToArtistPage = navToArtistPage
                 )
             }
         }
         /**
-         * Small pink line between Recycler and buttons
+         * Small pink line between Recycler and Buttons
          */
-        PinkDivider()
+        Divider(color = Color.Magenta, thickness = 2.dp)
 
         /**
          * Buttons for getting concerts
          */
         Box(
-            modifier = Modifier.weight(0.72f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.height(IntrinsicSize.Min)
         ) {
-            CityConcertsBackground()
+            Image(
+                modifier = Modifier.fillMaxWidth(),
+                painter = painterResource(id = R.drawable.background),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .padding(bottom = 12.dp),
+                    .padding(horizontal = 10.dp)
+                    .padding(top = 10.dp, bottom = 15.dp)
+                    .navigationBarsPadding(),
             ) {
-                val isButtonEnabled = when (state) {
-                    is MyResponse.Success -> true
-                    else -> false
-                }
+                val isButtonEnabled = state is CommonResponse.Success
                 /**
                  * Styles buttons
                  */
-                Row {
-                    SortStyleButton(
-                        style = MusicStyle.Rock(),
-                        onStyleClicked = onStyleClick,
-                        actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f),
-                        enabled = isButtonEnabled
-                    )
-                    SortStyleButton(
-                        style = MusicStyle.Classic(),
-                        onStyleClicked = onStyleClick,
-                        actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f),
-                        enabled = isButtonEnabled
-                    )
-                    SortStyleButton(
-                        style = MusicStyle.Dancing(),
-                        onStyleClicked = onStyleClick,
-                        actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f),
-                        enabled = isButtonEnabled
-                    )
-                    SortStyleButton(
-                        style = MusicStyle.Pop(),
-                        onStyleClicked = onStyleClick,
-                        actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f),
-                        enabled = isButtonEnabled
-                    )
-                    SortStyleButton(
-                        style = MusicStyle.Vocal(),
-                        onStyleClicked = onStyleClick,
-                        actual = actualChoiceStyle,
-                        modifier = Modifier.weight(1f),
-                        enabled = isButtonEnabled
-                    )
-                }
+                StyleMusicButtons(
+                    onClick = onStyleClick,
+                    actualChoice = actualChoiceStyle
+                )
                 /**
                  * All styles button
                  */
@@ -165,9 +149,13 @@ fun CityConcertsContent(
                     enabled = isButtonEnabled
                 )
                 /**
-                 * F/A buttons
+                 * Finished / Active buttons
                  */
-                Row {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp)
+                ) {
                     SortStyleFinishedActualConcertsByCity(
                         onFAClick = onFAClick,
                         mode = false,
@@ -190,32 +178,39 @@ fun CityConcertsContent(
 
 @Composable
 private fun Success(
-    state: MyResponse.Success<List<Concert>>,
+    state: CommonResponse.Success<List<ConcertDomain>>,
     context: Context,
-    onHeartClick: (Int) -> Unit,
-    navToMusicianPage: (Int) -> Unit
+    onHeartClick: (String) -> Unit,
+    navToArtistPage: (String) -> Unit
 ) {
+    Log.i("MyMusic", "6.CityConcertsContent.Success")
+
     ConcertsRecyclerView(
         data = state.data,
         context = context,
         onHeartClick = onHeartClick,
-        navToMusicianPage = navToMusicianPage,
+        navToArtistPage = navToArtistPage,
     )
 }
 
 @Composable
 private fun Initial(getAllConcerts: () -> Unit) {
+    Log.i("MyMusic", "6.CityConcertsContent.Initial")
+
     CircularProgressIndicator(modifier = Modifier.padding(bottom = 72.dp))
     getAllConcerts()
 }
 
 @Composable
 private fun Load() {
+    Log.i("MyMusic", "6.CityConcertsContent.Load")
+
     CircularProgressIndicator(modifier = Modifier.padding(bottom = 72.dp))
 }
 
 @Composable
 private fun Error() {
+    Log.i("MyMusic", "6.CityConcertsContent.Error")
     Text(
         text = stringResource(R.string.error),
         fontSize = 20.sp,

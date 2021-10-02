@@ -9,6 +9,7 @@ plugins {
     id("com.google.secrets_gradle_plugin") version ("0.4")
     // Firebase
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 
 }
 
@@ -49,7 +50,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.0-beta09"
+        kotlinCompilerExtensionVersion = "1.0.2"
     }
 }
 
@@ -87,6 +88,8 @@ dependencies {
 
     Dependencies.accompanist.apply {
         implementation(permissions)
+        implementation(insets)
+        implementation(systemUi)
     }
 
     Dependencies.map.apply {
@@ -100,6 +103,8 @@ dependencies {
         implementation(auth)
         implementation(firestoreKtx)
         implementation(coroutinePlayServices)
+        implementation(crashlytics)
+        implementation(analytics)
     }
 
     Dependencies.room.apply {
@@ -107,6 +112,7 @@ dependencies {
         implementation(ktx)
         kapt(compiler)
     }
+    implementation("com.google.android.gms:play-services-auth:19.2.0")
 }
 
 kapt {

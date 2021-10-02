@@ -7,6 +7,10 @@ import androidx.compose.material.lightColors
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import com.example.streetmusic2.R
 
 private val DarkColorPalette = darkColors(
     primary = Purple,
@@ -63,4 +67,3 @@ fun StreetMusic2Theme(
         )
     }
 }
-

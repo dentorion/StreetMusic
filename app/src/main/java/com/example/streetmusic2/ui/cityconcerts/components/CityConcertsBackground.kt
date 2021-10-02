@@ -14,6 +14,6 @@ fun CityConcertsBackground() {
         modifier = Modifier.fillMaxSize(),
         painter = painterResource(id = R.drawable.background),
         contentDescription = null,
-        contentScale = ContentScale.FillWidth,
+        contentScale = ContentScale.Crop,
     )
 }

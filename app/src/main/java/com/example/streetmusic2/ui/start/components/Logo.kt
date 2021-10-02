@@ -11,8 +11,6 @@ import com.example.streetmusic2.R
 @Composable
 fun Logo() {
     Image(
-        modifier = Modifier
-            .padding(horizontal = 16.dp),
         painter = painterResource(id = R.drawable.logo),
         contentDescription = null,
     )

@@ -2,6 +2,7 @@ package com.example.streetmusic2.util.userpref
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.streetmusic2.util.constant.*
 import com.example.streetmusic2.util.userpref.extensions.set
 import com.example.streetmusic2.util.userpref.extensions.toExactDouble
 import com.example.streetmusic2.util.userpref.extensions.toExactFloat
@@ -19,79 +20,93 @@ class UserSharedPreferences @Inject constructor(@ApplicationContext context: Con
      * User "listener" GET parameters
      */
     fun isMusician(): Boolean =
-        pref.getBoolean("isMusician", false)
+        pref.getBoolean(USER_IS_MUSICIAN, false)
 
     fun getLatitude(): String =
-        pref.getFloat("latitude", 0f).toExactDouble().toString()
+        pref.getFloat(USER_LATITUDE, 0f).toExactDouble().toString()
 
     fun getLongitude(): String =
-        pref.getFloat("longitude", 0f).toExactDouble().toString()
+        pref.getFloat(USER_LONGITUDE, 0f).toExactDouble().toString()
 
-    fun getCity(): String? =
-        pref.getString("city", "")
+    fun getCity(): String =
+        pref.getString(USER_CITY, "").toString()
 
-    fun getCountry(): String? =
-        pref.getString("country", "")
+    fun getCountry(): String =
+        pref.getString(USER_COUNTRY, "").toString()
 
     /**
      * User "listener" SET parameters
      */
     fun setIsMusician(value: Boolean) =
-        pref.set("isMusician", value)
+        pref.set(USER_IS_MUSICIAN, value)
 
     fun setLatitude(value: String) =
-        pref.set("latitude", value.toDouble().toExactFloat())
+        pref.set(USER_LATITUDE, value.toDouble().toExactFloat())
 
     fun setLongitude(value: String) =
-        pref.set("longitude", value.toDouble().toExactFloat())
+        pref.set(USER_LONGITUDE, value.toDouble().toExactFloat())
 
     fun setCity(value: String) =
-        pref.set("city", value)
+        pref.set(USER_CITY, value)
 
     fun setCountry(value: String) =
-        pref.set("country", value)
+        pref.set(USER_COUNTRY, value)
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * User "musician" GET parameters
+     * ARTIST "musician" GET parameters
      */
-    fun getId(): String? =
-        pref.getString("id", "")
+    fun getId(): String =
+        pref.getString(USER_ID, "").toString()
 
-    fun getNameGroup(): String? =
-        pref.getString("latitude", "")
+    fun getNameGroup(): String =
+        pref.getString(USER_NAME_BAND, "").toString()
 
-    fun getAvatar(): String? =
-        pref.getString("longitude", "")
+    fun getAddress(): String =
+        pref.getString(USER_ADDRESS, "").toString()
 
-    fun getStyleMusic(): String? =
-        pref.getString("city", "")
+    fun getAvatar(): String =
+        pref.getString(USER_AVATAR, "").toString()
 
-    fun getTimeStart(): String? =
-        pref.getString("country", "")
+    fun getDescription(): String =
+        pref.getString(USER_DESCRIPTION, "").toString()
 
-    fun getTimeStop(): String? =
-        pref.getString("country", "")
+    fun getStyleMusic(): String =
+        pref.getString(USER_STYLE, "").toString()
+
+    fun getTimeStart(): Long =
+        pref.getLong(USER_TIME_START, 0L)
+
+    fun getTimeStop(): Long =
+        pref.getLong(USER_TIME_FINISH, 0L)
 
     /**
-     * User "musician" SET parameters
+     * ARTIST "musician" SET parameters
      */
     fun setId(value: String) =
-        pref.set("id", value)
+        pref.set(USER_ID, value)
 
     fun setNameGroup(value: String) =
-        pref.set("latitude", value)
+        pref.set(USER_NAME_BAND, value)
+
+    fun setAddress(value: String) =
+        pref.set(USER_ADDRESS, value)
 
     fun setAvatar(value: String) =
-        pref.set("longitude", value)
+        pref.set(USER_AVATAR, value)
+
+    fun setDescription(value: String) =
+        pref.set(USER_DESCRIPTION, value)
 
     fun setStyleMusic(value: String) =
-        pref.set("city", value)
+        pref.set(USER_STYLE, value)
 
-    fun setTimeStart(value: String) =
-        pref.set("country", value)
+    fun setTimeStart(value: Long) =
+        pref.set(USER_TIME_START, value)
 
-    fun setTimeStop(value: String) =
-        pref.set("country", value)
+    fun setTimeStop(value: Long) =
+        pref.set(USER_TIME_FINISH, value)
 }
 
 private const val USER_SHARED_PREFERENCES_TAG = "User"
