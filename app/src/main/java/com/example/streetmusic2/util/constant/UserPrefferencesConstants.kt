@@ -9,6 +9,7 @@ const val USER_LATITUDE: String = "user_latitude"
 const val USER_LONGITUDE: String = "user_longitude"
 const val USER_CITY: String = "user_city"
 const val USER_COUNTRY: String = "user_country"
+const val USER_TIME_DIFFERENCE: String = "user_timeDifference"
 
 /**
  * SharedPreferences Artist

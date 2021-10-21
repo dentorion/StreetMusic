@@ -12,8 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.streetmusic2.common.model.concert.ConcertDomain
-import com.example.streetmusic2.common.model.concert.ConcertFirebase
+import com.example.streetmusic2.common.model.domain.ConcertDomain
 import com.example.streetmusic2.ui.cityconcerts.components.MapIcon
 import com.example.streetmusic2.ui.cityconcerts.components.MusicStyleIcon
 
@@ -35,10 +34,10 @@ fun ConcertItem(concertDomain: ConcertDomain) {
                     .background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
-                MusicStyleIcon(musicStyle = concertDomain.styleMusic)
+                MusicStyleIcon(musicType = concertDomain.styleMusic)
             }
             Text(
-                text = concertDomain.name,
+                text = concertDomain.bandName,
                 color = Color.White,
                 modifier = Modifier.padding(start = 15.dp)
             )

@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.streetmusic2.util.constant.IM_ARTIST
-import com.example.streetmusic2.util.userpref.LocalUserPref
+import com.example.streetmusic2.util.user.LocalUserPref
 
 @Composable
 fun MusicianButton(navToPermissions: () -> Unit) {

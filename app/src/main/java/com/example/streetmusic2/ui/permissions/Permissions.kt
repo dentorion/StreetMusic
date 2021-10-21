@@ -13,13 +13,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.concert.ConcertFirebase
-import com.example.streetmusic2.common.model.responce.CommonResponse
-import com.example.streetmusic2.ui.permissions.components.HasPermissionLoad
+import com.example.streetmusic2.common.model.domain.ConcertDomain
+import com.example.streetmusic2.common.model.viewmodelstate.CommonResponse
 import com.example.streetmusic2.ui.permissions.components.LocationMusicLogo
+import com.example.streetmusic2.ui.permissions.components.ShowLoading
 import com.example.streetmusic2.ui.start.components.BackgroundImage
-import com.example.streetmusic2.util.userpref.LocalUserPref
-import com.example.streetmusic2.util.userpref.UserSharedPreferences
+import com.example.streetmusic2.util.user.LocalUserPref
+import com.example.streetmusic2.util.user.UserSharedPreferences
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
@@ -56,8 +56,7 @@ fun Permissions(
                     navToAuthorization = navToAuthorization,
                     navToCityConcerts = navToCityConcerts,
                     uiState = viewModel.state,
-                    userPref = LocalUserPref.current,
-                    getUserCity = viewModel::getUserCity,
+                    getUserInfo = viewModel::getUserInfo,
                 )
             }
 
@@ -76,9 +75,8 @@ fun Permissions(
 private fun HasPermission(
     navToAuthorization: () -> Unit,
     navToCityConcerts: () -> Unit,
-    uiState: CommonResponse<ConcertFirebase>,
-    userPref: UserSharedPreferences,
-    getUserCity: () -> Unit,
+    uiState: CommonResponse<ConcertDomain>,
+    getUserInfo: () -> Unit,
 ) {
     /**
      * Check UI State
@@ -89,11 +87,11 @@ private fun HasPermission(
         }
         is CommonResponse.Load -> {
             Log.i("MyMusic", "4.PermissionsContent.Load")
-            HasPermissionLoad()
+            ShowLoading()
         }
         is CommonResponse.Success -> {
             Log.i("MyMusic", "4.PermissionsContent.Success")
-            HasPermissionLoad()
+            val userPref = LocalUserPref.current
             setUserPref(userPref, uiState)
             if (userPref.isMusician()) {
                 navToAuthorization()
@@ -103,8 +101,7 @@ private fun HasPermission(
         }
         is CommonResponse.Initial -> {
             Log.i("MyMusic", "4.PermissionsContent.Initial")
-            HasPermissionLoad()
-            getUserCity()
+            getUserInfo()
         }
     }
 }
@@ -195,13 +192,14 @@ private fun NoPermissions() {
 
 private fun setUserPref(
     userPref: UserSharedPreferences,
-    state: CommonResponse.Success<ConcertFirebase>
+    state: CommonResponse.Success<ConcertDomain>
 ) {
     try {
         userPref.setCity(state.data.city)
         userPref.setCountry(state.data.country)
         userPref.setLatitude(state.data.latitude)
         userPref.setLongitude(state.data.longitude)
+        userPref.setTimeDifference(state.data.UTCDifference)
     } catch (e: Exception) {
         Log.i("MyMusic", "Error while user prefs are written")
     }

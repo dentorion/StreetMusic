@@ -22,14 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.concert.ConcertDomain
-import com.example.streetmusic2.common.model.music.MusicStyle
-import com.example.streetmusic2.common.model.responce.CommonResponse
+import com.example.streetmusic2.common.model.domain.ConcertDomain
+import com.example.streetmusic2.common.model.music.MusicType
+import com.example.streetmusic2.common.model.viewmodelstate.CommonResponse
 import com.example.streetmusic2.ui.cityconcerts.components.SortStyleAllConcertsByCity
 import com.example.streetmusic2.ui.cityconcerts.components.SortStyleFinishedActualConcertsByCity
 import com.example.streetmusic2.ui.permissions.components.ConcertsRecyclerView
 import com.example.streetmusic2.ui.preconcert.components.StyleMusicButtons
-import com.example.streetmusic2.util.userpref.LocalUserPref
+import com.example.streetmusic2.util.user.LocalUserPref
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 
@@ -47,9 +47,9 @@ fun CityConcerts(
         onStyleClick = { viewModel.switchStyleFunction(userCity, it) },
         onAllClick = { viewModel.switchAllFunction(userCity) },
         onFAClick = { viewModel.switchFAFunction(userCity, it) },
-        actualChoiceStyle = viewModel.style,
-        actualFAStyle = viewModel.switchFA,
-        actualAllStyle = viewModel.switchAll,
+        stateMusicTypeChoice = viewModel.stateMusicTypeChoice,
+        stateFinishedActiveConcerts = viewModel.stateFinishedActiveConcerts,
+        stateAllConcerts = viewModel.stateAllConcerts,
         state = viewModel.stateConcerts,
         context = LocalContext.current,
         userCity = userCity,
@@ -61,12 +61,12 @@ fun CityConcerts(
 fun CityConcertsContent(
     getAllConcerts: () -> Unit,
     onHeartClick: (String) -> Unit,
-    onStyleClick: (MusicStyle) -> Unit,
+    onStyleClick: (MusicType) -> Unit,
     onAllClick: () -> Unit,
     onFAClick: (Boolean) -> Unit,
-    actualChoiceStyle: MusicStyle,
-    actualFAStyle: Boolean,
-    actualAllStyle: Boolean,
+    stateMusicTypeChoice: MusicType,
+    stateFinishedActiveConcerts: Boolean,
+    stateAllConcerts: Boolean,
     state: CommonResponse<List<ConcertDomain>>,
     context: Context,
     userCity: String,
@@ -137,7 +137,7 @@ fun CityConcertsContent(
                  */
                 StyleMusicButtons(
                     onClick = onStyleClick,
-                    actualChoice = actualChoiceStyle
+                    actualChoice = stateMusicTypeChoice,
                 )
                 /**
                  * All styles button
@@ -145,7 +145,7 @@ fun CityConcertsContent(
                 SortStyleAllConcertsByCity(
                     userCity = userCity,
                     onAllClick = onAllClick,
-                    actualAllStyle = actualAllStyle,
+                    actualAllStyle = stateAllConcerts,
                     enabled = isButtonEnabled
                 )
                 /**
@@ -160,14 +160,14 @@ fun CityConcertsContent(
                         onFAClick = onFAClick,
                         mode = false,
                         modifier = Modifier.weight(1f),
-                        actualFAStyle = actualFAStyle,
+                        actualFAStyle = stateFinishedActiveConcerts,
                         enabled = isButtonEnabled
                     )
                     SortStyleFinishedActualConcertsByCity(
                         onFAClick = onFAClick,
                         mode = true,
                         modifier = Modifier.weight(1f),
-                        actualFAStyle = actualFAStyle,
+                        actualFAStyle = stateFinishedActiveConcerts,
                         enabled = isButtonEnabled
                     )
                 }
@@ -184,7 +184,6 @@ private fun Success(
     navToArtistPage: (String) -> Unit
 ) {
     Log.i("MyMusic", "6.CityConcertsContent.Success")
-
     ConcertsRecyclerView(
         data = state.data,
         context = context,
@@ -196,7 +195,6 @@ private fun Success(
 @Composable
 private fun Initial(getAllConcerts: () -> Unit) {
     Log.i("MyMusic", "6.CityConcertsContent.Initial")
-
     CircularProgressIndicator(modifier = Modifier.padding(bottom = 72.dp))
     getAllConcerts()
 }
@@ -204,7 +202,6 @@ private fun Initial(getAllConcerts: () -> Unit) {
 @Composable
 private fun Load() {
     Log.i("MyMusic", "6.CityConcertsContent.Load")
-
     CircularProgressIndicator(modifier = Modifier.padding(bottom = 72.dp))
 }
 

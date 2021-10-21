@@ -55,6 +55,10 @@ android {
 }
 
 dependencies {
+
+    // Retrofit for server api
+    implementation(project(mapOf("path" to ":network")))
+
     Dependencies.base.apply {
         implementation (coreKtx)
         implementation (appcompat)
@@ -105,6 +109,7 @@ dependencies {
         implementation(coroutinePlayServices)
         implementation(crashlytics)
         implementation(analytics)
+        implementation(firebaseStorageKtx)
     }
 
     Dependencies.room.apply {

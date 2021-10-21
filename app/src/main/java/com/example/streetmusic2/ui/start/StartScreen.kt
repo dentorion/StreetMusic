@@ -21,7 +21,10 @@ fun StartScreen(
 
 @Composable
 fun StartContent(navToPermissions: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
         BackgroundImage()
 
         Column(

@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.streetmusic2.common.model.concert.ConcertDomain
+import com.example.streetmusic2.common.model.domain.ConcertDomain
 
 @Composable
 fun ConcertRow(
@@ -56,7 +56,7 @@ fun ConcertRow(
         Box(modifier = Modifier.weight(5f).padding(start = 5.dp)) {
             Row {
                 Text(
-                    text = concertDomain.name,
+                    text = concertDomain.bandName,
                     fontWeight = FontWeight.Bold
                 )
             }

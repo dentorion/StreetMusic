@@ -8,12 +8,10 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.streetmusic2.util.constant.START_CONCERT
-import com.example.streetmusic2.util.userpref.LocalUserPref
-import com.google.accompanist.insets.navigationBarsWithImePadding
+import com.example.streetmusic2.util.user.LocalUserPref
 
 @Composable
 fun RunConcertButton(

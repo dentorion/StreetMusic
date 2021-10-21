@@ -7,3 +7,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Street Music 2"
 include (":app")
+include(":network")

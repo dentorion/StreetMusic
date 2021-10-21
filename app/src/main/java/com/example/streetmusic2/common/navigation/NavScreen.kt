@@ -41,7 +41,8 @@ sealed class NavScreen(val route: String) {
      * On-line concert page
      */
     object Concert : NavScreen("Concert") {
-        const val routeWithArgument: String = "Concert/{artistId}"
-        const val argument0: String = "artistId"
+        const val routeWithArgument: String = "Concert/{userId}/{documentId}"
+        const val argument0: String = "userId"
+        const val argument1: String = "documentId"
     }
 }

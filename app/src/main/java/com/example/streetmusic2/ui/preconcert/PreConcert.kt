@@ -1,5 +1,6 @@
 package com.example.streetmusic2.ui.preconcert
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -17,91 +18,56 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.music.convertToMusicStyle
-import com.example.streetmusic2.common.model.responce.CommonResponse
+import com.example.streetmusic2.common.model.viewmodelstate.CommonResponse
 import com.example.streetmusic2.ui.artist.components.StatusOnline
 import com.example.streetmusic2.ui.preconcert.components.*
 import com.example.streetmusic2.ui.start.components.BackgroundImage
-import com.example.streetmusic2.util.constant.HOUR_ONE_MLS
-import com.example.streetmusic2.util.userpref.LocalUserPref
-import com.example.streetmusic2.util.userpref.UserSharedPreferences
+import com.example.streetmusic2.util.time.LocalTimeUtil
+import com.example.streetmusic2.util.time.TimeUtil
+import com.example.streetmusic2.util.user.LocalUserPref
+import com.example.streetmusic2.util.user.UserSharedPreferences
 import com.google.accompanist.insets.imePadding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import java.util.*
 
 @Composable
 fun PreConcert(
     viewModel: PreConcertViewModel = hiltViewModel(),
-    currentArtisId: String,
-    navToConcert: (String) -> Unit,
+    artistId: String,
+    navToConcert: (String, String) -> Unit,
     navToMain: () -> Unit,
 ) {
-
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         BackgroundImage()
 
         Log.i("MyMusic", "9.PreConcert")
+        val uiState = viewModel.statePreConcert
 
-        when (val uiState = viewModel.statePreConcert) {
+        when (uiState) {
             is CommonResponse.Error -> ErrorPreConcert(uiState.message)
-            is CommonResponse.Initial -> InitialPreConcert(
+            is CommonResponse.Initial -> PreConcertContent(
                 viewModel = viewModel,
-                uId = currentArtisId,
-                navToMain = navToMain
+                artisId = artistId,
+                navToMain = navToMain,
+                userPref = LocalUserPref.current,
+                uploadAvatar = { viewModel.uploadAvatar(it, artistId) },
             )
             is CommonResponse.Load -> LoadPreConcert()
-            is CommonResponse.Success -> SuccessPreConcert(
-                navToConcert = navToConcert,
-                uId = currentArtisId
-            )
+            is CommonResponse.Success -> navToConcert(artistId, uiState.data)
         }
     }
 }
 
 @Composable
-private fun InitialPreConcert(viewModel: PreConcertViewModel, uId: String, navToMain: () -> Unit) {
-    SetInitialValuesFromUserPref(viewModel)
-    PreConcertContent(viewModel, uId, navToMain)
-}
-
-/**
- * First start - set userPref to default values from ViewModel
- * All other runs - set ViewModel fields from userPref values.
- */
-@Composable
-private fun SetInitialValuesFromUserPref(viewModel: PreConcertViewModel) {
-    val userPref = LocalUserPref.current
-
-    if (userPref.getStyleMusic().isNotEmpty()) {
-        viewModel.musicStyle = convertToMusicStyle(userPref.getStyleMusic())
-    } else {
-        userPref.setStyleMusic(viewModel.musicStyle.styleName)
-    }
-
-    if (userPref.getNameGroup().isNotEmpty()) {
-        viewModel.bandName = userPref.getNameGroup()
-    } else {
-        userPref.setNameGroup(viewModel.bandName)
-    }
-
-    if (userPref.getAddress().isNotEmpty()) {
-        viewModel.address = userPref.getAddress()
-    } else {
-        userPref.setAddress(viewModel.address)
-    }
-
-    if (userPref.getDescription().isNotEmpty()) {
-        viewModel.description = userPref.getDescription()
-    } else {
-        userPref.setDescription(viewModel.description)
-    }
-}
-
-@Composable
-private fun PreConcertContent(viewModel: PreConcertViewModel, uId: String, navToMain: () -> Unit) {
-    val userPref = LocalUserPref.current
+private fun PreConcertContent(
+    viewModel: PreConcertViewModel,
+    artisId: String,
+    navToMain: () -> Unit,
+    userPref: UserSharedPreferences,
+    uploadAvatar: (Uri) -> Unit,
+) {
     val scrollState = rememberScrollState()
+    val timeUtil = LocalTimeUtil.current
 
     Column(
         modifier = Modifier
@@ -117,6 +83,9 @@ private fun PreConcertContent(viewModel: PreConcertViewModel, uId: String, navTo
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
+            /**
+             * Star icon
+             */
             Box(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
@@ -135,12 +104,21 @@ private fun PreConcertContent(viewModel: PreConcertViewModel, uId: String, navTo
                     )
                 }
             }
+            /**
+             * Avatar
+             */
             Box(
                 modifier = Modifier.weight(2f),
                 contentAlignment = Alignment.Center
             ) {
-                AvatarPreConcert(getAvatarUrl())
+                AvatarPreConcert(
+                    artistAvatarUrl = viewModel.avatarUrl,
+                    uploadAvatar = uploadAvatar,
+                )
             }
+            /**
+             * Exit icon
+             */
             Box(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
@@ -162,77 +140,88 @@ private fun PreConcertContent(viewModel: PreConcertViewModel, uId: String, navTo
 
             }
         }
+
+        /**
+         * ON_Line / Off-line status
+         */
         Box(Modifier.padding(20.dp)) {
             StatusOnline(false)
         }
+
+        /**
+         * City and Country
+         */
         CityCountry()
+
+        /**
+         * Style Music buttons selector
+         */
         StyleMusicButtons(
             onClick = {
                 userPref.setStyleMusic(it.styleName)
-                viewModel.musicStyle = it
+                viewModel.musicType = it
             },
-            actualChoice = viewModel.musicStyle
+            actualChoice = viewModel.musicType,
         )
-        BandNameTextField(
-            caption = "Band Name",
-            value = viewModel.bandName,
-            onChange = {
-                userPref.setNameGroup(it)
-                viewModel.bandName = it
-            })
-        ConcertAddressTextField(
-            caption = "Concert address",
-            value = viewModel.address,
-            onChange = {
-                userPref.setAddress(it)
-                viewModel.address = it
-            })
-        DescriptionTextField(
-            caption = "Describe in few words",
-            value = viewModel.description,
-            onChange = {
-                userPref.setDescription(it)
-                viewModel.description = it
-            })
-        RunConcertButton(
-            onClick = {
-                startConcertActions(viewModel, userPref, uId)
-            },
-            uID = uId,
-        )
+
+        /**
+         * Text fields: bandName, address, description
+         */
+        TextFields(viewModel, userPref)
+
+        /**
+         * Start Concert button
+         */
+        StartButton(viewModel, userPref, artisId, timeUtil)
     }
 }
 
-/**
- * What should be done to run concert
- */
-private fun startConcertActions(
+@Composable
+private fun StartButton(
     viewModel: PreConcertViewModel,
     userPref: UserSharedPreferences,
-    uId: String
+    artisId: String,
+    timeUtil: TimeUtil
 ) {
-    viewModel.runConcert(
-        latitude = userPref.getLatitude(),
-        longitude = userPref.getLongitude(),
-        country = userPref.getCountry(),
-        city = userPref.getCity(),
-        artistId = uId,
-        avatar = "",
+    RunConcertButton(
+        onClick = {
+            startConcert(
+                viewModel = viewModel,
+                userPref = userPref,
+                uId = artisId,
+                timeUtil = timeUtil
+            )
+        },
+        uID = artisId,
     )
-    userPref.setTimeStart(Date().time)
-    userPref.setTimeStop(Date().time + HOUR_ONE_MLS)
-}
-
-/**
- * Загрузка аватарки по uId Artist
- */
-fun getAvatarUrl(): String {
-    return "https://image.shutterstock.com/image-illustration/casual-young-black-girl-purple-260nw-1806646354.jpg"
 }
 
 @Composable
-private fun SuccessPreConcert(navToConcert: (String) -> Unit, uId: String) {
-    navToConcert(uId)
+private fun TextFields(
+    viewModel: PreConcertViewModel,
+    userPref: UserSharedPreferences
+) {
+    BandNameTextField(
+        caption = "Band Name",
+        value = viewModel.bandName,
+        onChange = {
+            userPref.setNameGroup(it)
+            viewModel.bandName = it
+        })
+    ConcertAddressTextField(
+        caption = "Concert address",
+        value = viewModel.address,
+        onChange = {
+            userPref.setAddress(it)
+            viewModel.address = it
+        })
+    DescriptionTextField(
+        caption = "Describe in few words",
+        value = viewModel.description,
+        onChange = {
+            userPref.setDescription(it)
+            viewModel.description = it
+        })
 }
 
 @Composable
@@ -248,7 +237,7 @@ private fun LoadPreConcert() {
 }
 
 @Composable
-fun ErrorPreConcert(message: String) {
+private fun ErrorPreConcert(message: String) {
     Log.i("MyMusic", "9.PreConcert.Error")
     Log.e("MyMusic", message)
     DisableSelection {
@@ -258,5 +247,24 @@ fun ErrorPreConcert(message: String) {
             maxLines = 1
         )
     }
+}
+
+/**
+ * This should be done to run concert
+ */
+private fun startConcert(
+    viewModel: PreConcertViewModel,
+    userPref: UserSharedPreferences,
+    uId: String,
+    timeUtil: TimeUtil
+) {
+    viewModel.runConcert(
+        latitude = userPref.getLatitude(),
+        longitude = userPref.getLongitude(),
+        country = userPref.getCountry(),
+        city = userPref.getCity(),
+        artistId = uId,
+    )
+    userPref.setTimeStop(timeUtil.getUnixNowPlusHour())
 }
 

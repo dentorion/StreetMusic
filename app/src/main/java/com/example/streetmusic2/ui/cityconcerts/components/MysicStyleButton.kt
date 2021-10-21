@@ -8,15 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.streetmusic2.common.model.music.MusicStyle
+import com.example.streetmusic2.common.model.music.MusicType
 
 @Composable
-fun MusicStyleIcon(musicStyle: MusicStyle) {
-    Log.i("MyMusic", "Music Style Button: ${musicStyle.icon}")
-    if(musicStyle !is MusicStyle.None) {
+fun MusicStyleIcon(musicType: MusicType) {
+    Log.i("MyMusic", "Music Style Button: ${musicType.icon}")
+    if(musicType !is MusicType.None) {
         Image(
             modifier = Modifier.size(27.dp),
-            painter = painterResource(id = musicStyle.icon),
+            painter = painterResource(id = musicType.icon),
             contentDescription = null,
             contentScale = ContentScale.Fit,
         )

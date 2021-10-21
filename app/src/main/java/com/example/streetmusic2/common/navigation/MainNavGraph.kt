@@ -95,7 +95,7 @@ fun MainNavGraph(navController: NavHostController) {
             Log.i("MyMusic", "2.Navigation Graph.PreConcert")
             backStackEntry.arguments?.let {
                 PreConcert(
-                    currentArtisId = it.getString(NavScreen.Artist.argument0) ?: "",
+                    artistId = it.getString(NavScreen.PreConcert.argument0) ?: "",
                     navToConcert = actions.navigateToConcert,
                     navToMain = actions.navigateToStart
                 )
@@ -104,14 +104,21 @@ fun MainNavGraph(navController: NavHostController) {
 
         composable(
             route = NavScreen.Concert.routeWithArgument,
-            arguments = listOf(navArgument(NavScreen.Artist.argument0) {
-                type = NavType.StringType
-            })
+            arguments = listOf(
+                navArgument(NavScreen.Concert.argument0) {
+                    type = NavType.StringType
+                },
+                navArgument(NavScreen.Concert.argument1) {
+                    type = NavType.StringType
+                }
+            )
         ) { backStackEntry ->
             Log.i("MyMusic", "2.Navigation Graph.Concert")
             backStackEntry.arguments?.let {
                 Concert(
-                    currentArtisId = it.getString(NavScreen.Artist.argument0) ?: "",
+                    userId = it.getString(NavScreen.Concert.argument0) ?: "",
+                    documentId = it.getString(NavScreen.Concert.argument1) ?: "",
+                    navToPreConcert = actions.navigateToPreConcert
                 )
             }
         }

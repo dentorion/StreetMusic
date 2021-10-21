@@ -3,6 +3,9 @@ package com.example.streetmusic2.util.constant
 // Firebase collection named "concerts"
 const val CONCERTS_COLLECTION: String = "concerts"
 
+// Firebase collection named "users"
+const val USERS_COLLECTION: String = "users"
+
 // 1 HOUR in mls
 const val HOUR_ONE_MLS: Long = 3600000L
 
@@ -13,10 +16,13 @@ const val HOUR_ONE_MLS: Long = 3600000L
 const val FIELD_ARTIST_ID: String = "artistId"
 
 // "name band"
-const val FIELD_NAME_OF_GROUP: String = "name"
+const val FIELD_NAME_OF_GROUP: String = "bandName"
 
 // "city"
 const val FIELD_CITY: String = "city"
+
+// "create"
+const val FIELD_CREATE: String = "create"
 
 // "country"
 const val FIELD_COUNTRY: String = "country"
@@ -39,8 +45,8 @@ const val FIELD_ADDRESS: String = "address"
 // "description_concert"
 const val FIELD_DESCRIPTION = "description"
 
-// "time_start"
-const val FIELD_START: String = "timeStart"
+// "stopTime"
+const val FIELD_STOP_TIME: String = "stopTime"
 
-// "time_stop"
-const val FIELD_STOP: String = "timeStop"
+// "stop_manual"
+const val FIELD_STOP_MANUAL: String = "stopManual"

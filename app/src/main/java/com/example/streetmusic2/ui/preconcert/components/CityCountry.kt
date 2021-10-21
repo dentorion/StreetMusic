@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import com.example.streetmusic2.util.userpref.LocalUserPref
+import com.example.streetmusic2.util.user.LocalUserPref
 
 @Composable
 fun CityCountry() {

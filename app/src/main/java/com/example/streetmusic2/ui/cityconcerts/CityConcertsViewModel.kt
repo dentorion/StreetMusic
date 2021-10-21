@@ -1,15 +1,16 @@
 package com.example.streetmusic2.ui.cityconcerts
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.streetmusic2.common.model.concert.ConcertDomain
-import com.example.streetmusic2.common.model.favourite.FavouriteArtist
-import com.example.streetmusic2.common.model.music.MusicStyle
-import com.example.streetmusic2.common.model.responce.CommonResponse
-import com.example.streetmusic2.util.checkfavourite.ArtistsFavouriteRoom
+import com.example.streetmusic2.common.model.domain.ConcertDomain
+import com.example.streetmusic2.util.database.checkfavourite.FavouriteArtistModel
+import com.example.streetmusic2.common.model.music.MusicType
+import com.example.streetmusic2.common.model.viewmodelstate.CommonResponse
+import com.example.streetmusic2.util.database.checkfavourite.ArtistsFavouriteRoom
 import com.example.streetmusic2.util.firebase.ConcertsByCityStyleQueries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,28 +29,28 @@ class CityConcertsViewModel @Inject constructor(
         private set
 
     // Style button
-    private var switchStyle by mutableStateOf(false)
+    private var isMusicTypeChoice by mutableStateOf(false)
 
     // All styles button
-    var switchAll by mutableStateOf(true)
+    var stateAllConcerts by mutableStateOf(true)
 
     // Finished / Active button
-    var switchFA by mutableStateOf(true)
+    var stateFinishedActiveConcerts by mutableStateOf(true)
 
     // Name of selected style button
-    var style: MusicStyle by mutableStateOf(MusicStyle.None)
+    var stateMusicTypeChoice: MusicType by mutableStateOf(MusicType.None)
 
     /**
      * Select one of style buttons
      */
-    fun switchStyleFunction(city: String, styleValue: MusicStyle) = viewModelScope.launch {
-        switchStyle = true
-        switchAll = false
-        style = styleValue
-        if (switchFA) {
-            getConcertsActualCityStyle(city, style)
+    fun switchStyleFunction(city: String, typeValue: MusicType) = viewModelScope.launch {
+        isMusicTypeChoice = true
+        stateAllConcerts = false
+        stateMusicTypeChoice = typeValue
+        if (stateFinishedActiveConcerts) {
+            getConcertsActualCityStyle(city, stateMusicTypeChoice)
         } else {
-            getConcertsExpiredCityStyle(city, style)
+            getConcertsExpiredCityStyle(city, stateMusicTypeChoice)
         }
     }
 
@@ -57,33 +58,33 @@ class CityConcertsViewModel @Inject constructor(
      * Select Finished / Active button
      */
     fun switchFAFunction(city: String, switchFAValue: Boolean) = viewModelScope.launch {
-        switchFA = switchFAValue
-        when (switchFA) {
+        stateFinishedActiveConcerts = switchFAValue
+        when (stateFinishedActiveConcerts) {
             false -> {
-                if (switchAll) {
+                if (stateAllConcerts) {
                     getConcertsExpiredCity(city)
                 } else {
-                    getConcertsExpiredCityStyle(city, style)
+                    getConcertsExpiredCityStyle(city, stateMusicTypeChoice)
                 }
             }
             true -> {
-                if (switchAll) {
+                if (stateAllConcerts) {
                     getConcertsActualCity(city)
                 } else {
-                    getConcertsActualCityStyle(city, style)
+                    getConcertsActualCityStyle(city, stateMusicTypeChoice)
                 }
             }
         }
     }
 
     /**
-     * Select all styles button
+     * Select all concerts (styles) button
      */
     fun switchAllFunction(city: String) {
-        switchAll = true
-        switchStyle = false
-        style = MusicStyle.None
-        if (switchFA) {
+        isMusicTypeChoice = false
+        stateMusicTypeChoice = MusicType.None
+        stateAllConcerts = true
+        if (stateFinishedActiveConcerts) {
             getConcertsActualCity(city)
         } else {
             getConcertsExpiredCity(city)
@@ -91,14 +92,14 @@ class CityConcertsViewModel @Inject constructor(
     }
 
     /**
-     * Get Active concerts of all styles
+     * On Initial - Get Active concerts of all styles
      */
     fun initialStart(city: String) {
         getConcertsActualCity(city = city)
     }
 
     /**
-     * Save / Del favourite artists
+     * Save / Delete favourite artist
      */
     fun clickHeart(artistId: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
@@ -106,7 +107,7 @@ class CityConcertsViewModel @Inject constructor(
                 artistFavouriteRoom.delFavourite(artistId = artistId)
             } else {
                 artistFavouriteRoom.addFavourite(
-                    FavouriteArtist(idArtist = artistId)
+                    FavouriteArtistModel(idArtist = artistId)
                 )
             }
         }
@@ -131,11 +132,17 @@ class CityConcertsViewModel @Inject constructor(
      */
     private fun getConcertsExpiredCity(city: String) = viewModelScope.launch {
         stateConcerts = CommonResponse.Load()
-        val concerts = concertsByCityStyleQueries.getConcertsExpiredCity(city)
+        val concertsExpiredByTime = concertsByCityStyleQueries.getConcertsExpiredCityTime(city)
+        Log.i("MyMusic", "CityViewModel. concertsExpiredByTime count: ${concertsExpiredByTime.size}")
+        val concertsExpiredByCancellation = concertsByCityStyleQueries.getConcertsExpiredCityCancellation(city)
+        Log.i("MyMusic", "CityViewModel. concertsExpiredByCancellation count: ${concertsExpiredByCancellation.size}")
+
+        val concerts = concertsExpiredByTime + concertsExpiredByCancellation
+
         withContext(Dispatchers.IO) {
             concerts.onEach {
                 it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.artistId)
-            }
+            }.sortedBy { it.create }
         }
         stateConcerts = CommonResponse.Success(concerts)
     }
@@ -143,9 +150,9 @@ class CityConcertsViewModel @Inject constructor(
     /**
      * Get actual "concerts" in city by style of music
      */
-    private fun getConcertsActualCityStyle(city: String, style: MusicStyle) = viewModelScope.launch {
+    private fun getConcertsActualCityStyle(city: String, type: MusicType) = viewModelScope.launch {
         stateConcerts = CommonResponse.Load()
-        val concerts = concertsByCityStyleQueries.getConcertsActualCityStyle(city, style)
+        val concerts = concertsByCityStyleQueries.getConcertsActualCityStyle(city, type)
         withContext(Dispatchers.IO) {
             concerts.onEach {
                 it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.artistId)
@@ -157,9 +164,16 @@ class CityConcertsViewModel @Inject constructor(
     /**
      * Get expired "concerts" in city by style of music
      */
-    private fun getConcertsExpiredCityStyle(city: String, style: MusicStyle) = viewModelScope.launch {
+    private fun getConcertsExpiredCityStyle(city: String, type: MusicType) = viewModelScope.launch {
         stateConcerts = CommonResponse.Load()
-        val concerts = concertsByCityStyleQueries.getConcertsExpiredCityStyle(city, style)
+
+        val concertsExpiredByTime = concertsByCityStyleQueries.getConcertsExpiredCityStyle(city, type)
+        Log.i("MyMusic", "CityViewModel. concertsExpiredByTime count: ${concertsExpiredByTime.size}")
+        val concertsExpiredByCancellation = concertsByCityStyleQueries.getConcertsExpiredCityStyleCancellation(city, type)
+        Log.i("MyMusic", "CityViewModel. concertsExpiredByCancellation count: ${concertsExpiredByCancellation.size}")
+
+        val concerts = concertsExpiredByTime + concertsExpiredByCancellation
+
         withContext(Dispatchers.IO) {
             concerts.onEach {
                 it.isFavourite = artistFavouriteRoom.checkFavouriteById(it.artistId)

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.streetmusic2.common.model.responce.CommonResponse
+import com.example.streetmusic2.common.model.viewmodelstate.CommonResponse
 import com.example.streetmusic2.util.firebase.StopConcertQueries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,10 +19,17 @@ class ConcertViewModel @Inject constructor(
     /**
      * State
      */
-    var stateConcert: CommonResponse<Nothing?> by mutableStateOf(CommonResponse.Initial())
+    var stateConcert: CommonResponse<Boolean> by mutableStateOf(CommonResponse.Initial())
         private set
 
-    fun stopConcert() = viewModelScope.launch {
-
+    fun stopConcert(documentId: String) = viewModelScope.launch {
+        stateConcert = CommonResponse.Load()
+        stopConcertQueries.stopConcert(documentId) { result ->
+            stateConcert = if (result) {
+                CommonResponse.Success(true)
+            } else {
+                CommonResponse.Error("Can't stop concert")
+            }
+        }
     }
 }

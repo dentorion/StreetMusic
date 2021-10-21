@@ -17,9 +17,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.streetmusic2.common.navigation.MainNavGraph
 import com.example.streetmusic2.ui.theme.StreetMusic2Theme
-import com.example.streetmusic2.util.userpref.LocalActivity
-import com.example.streetmusic2.util.userpref.LocalUserPref
-import com.example.streetmusic2.util.userpref.UserSharedPreferences
+import com.example.streetmusic2.util.time.LocalTimeUtil
+import com.example.streetmusic2.util.time.TimeUtil
+import com.example.streetmusic2.util.user.LocalUserPref
+import com.example.streetmusic2.util.user.UserSharedPreferences
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -34,12 +35,14 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var userPrefs: UserSharedPreferences
-    private val activity = this
+    lateinit var userUtil: UserSharedPreferences
+    @Inject
+    lateinit var timeUtil: TimeUtil
 
     @ExperimentalCoroutinesApi
     @ExperimentalPermissionsApi
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -56,8 +59,8 @@ class MainActivity : ComponentActivity() {
             }
 
             CompositionLocalProvider(
-                LocalUserPref provides userPrefs,
-                LocalActivity provides activity,
+                LocalUserPref provides userUtil,
+                LocalTimeUtil provides timeUtil,
                 LocalSystemUiController provides systemUiController
             ) {
                 ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
@@ -74,5 +77,5 @@ class MainActivity : ComponentActivity() {
 }
 
 val LocalSystemUiController = staticCompositionLocalOf<SystemUiController> {
-    error("No LocalActivity found!")
+    error("No SystemUiController found!")
 }

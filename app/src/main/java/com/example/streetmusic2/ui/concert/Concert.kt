@@ -17,38 +17,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.responce.CommonResponse
+import com.example.streetmusic2.common.model.viewmodelstate.CommonResponse
 import com.example.streetmusic2.ui.artist.components.Avatar
 import com.example.streetmusic2.ui.artist.components.StatusOnline
 import com.example.streetmusic2.ui.concert.components.StopConcertButton
 import com.example.streetmusic2.ui.preconcert.components.CityCountry
-import com.example.streetmusic2.ui.preconcert.getAvatarUrl
 import com.example.streetmusic2.ui.start.components.BackgroundImage
-import com.example.streetmusic2.util.userpref.LocalUserPref
+import com.example.streetmusic2.util.time.LocalTimeUtil
+import com.example.streetmusic2.util.user.LocalUserPref
 import com.google.accompanist.insets.imePadding
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun Concert(
     viewModel: ConcertViewModel = hiltViewModel(),
-    currentArtisId: String
+    documentId: String,
+    navToPreConcert: (String) -> Unit,
+    userId: String
 ) {
+
+    Log.i("MyMusic","documentId: $documentId")
+    Log.i("MyMusic","userId: $userId")
+
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         BackgroundImage()
 
         when (val uiState = viewModel.stateConcert) {
             is CommonResponse.Error -> ErrorConcert(uiState.message)
-            is CommonResponse.Initial -> InitialConcert(uId = currentArtisId)
+            is CommonResponse.Initial -> InitialConcert(
+                stopConcert = { viewModel.stopConcert(documentId) },
+            )
             is CommonResponse.Load -> LoadConcert()
-            is CommonResponse.Success -> SuccessConcert()
+            is CommonResponse.Success -> { navToPreConcert(userId) }
         }
     }
-}
-
-@Composable
-fun SuccessConcert() {
-    TODO("Not yet implemented")
 }
 
 @Composable
@@ -64,7 +65,9 @@ fun LoadConcert() {
 }
 
 @Composable
-fun InitialConcert(uId: String) {
+fun InitialConcert(
+    stopConcert: () -> Unit
+) {
     Column(
         modifier = Modifier
             .imePadding()
@@ -82,7 +85,7 @@ fun InitialConcert(uId: String) {
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Avatar(getAvatarUrl())
+                Avatar(LocalUserPref.current.getAvatar())
             }
         }
         Box(Modifier.padding(20.dp)) {
@@ -90,7 +93,7 @@ fun InitialConcert(uId: String) {
         }
         CityCountry()
         StarRating()
-        StopConcertButton(onClick = { /*TODO*/ }, uID = uId)
+        StopConcertButton(onClick = stopConcert)
         Text(
             text = "AUTO STOP: ${getEndTimeString()}",
             color = Color.White,
@@ -101,8 +104,11 @@ fun InitialConcert(uId: String) {
 }
 
 @Composable
-private fun getEndTimeString(): String = SimpleDateFormat("dd.MM.yy HH:mm", Locale.ENGLISH)
-    .format(Date(LocalUserPref.current.getTimeStop()))
+private fun getEndTimeString(): String {
+    val userPref = LocalUserPref.current
+    val timeUtil = LocalTimeUtil.current
+    return timeUtil.getStringConcertTime(userPref.getTimeStop())
+}
 
 @Composable
 private fun StarRating() {

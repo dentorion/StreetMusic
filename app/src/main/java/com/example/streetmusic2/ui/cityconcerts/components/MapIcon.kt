@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.concert.ConcertDomain
+import com.example.streetmusic2.common.model.domain.ConcertDomain
 
 
 @Composable

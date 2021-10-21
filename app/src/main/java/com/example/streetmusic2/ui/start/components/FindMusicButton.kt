@@ -1,7 +1,6 @@
 package com.example.streetmusic2.ui.start.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -11,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.streetmusic2.util.constant.FIND_MUSIC
-import com.example.streetmusic2.util.userpref.LocalUserPref
+import com.example.streetmusic2.util.user.LocalUserPref
 
 @Composable
 fun FindMusicButton(navToPermissions: () -> Unit) {

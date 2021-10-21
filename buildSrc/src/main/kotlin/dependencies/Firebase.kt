@@ -37,4 +37,9 @@ object Firebase {
     const val crashlytics = "com.google.firebase:firebase-crashlytics-ktx:${Versions.crashlytics}"
     const val analytics = "com.google.firebase:firebase-analytics-ktx:${Versions.analytics}"
 
+    /**
+     * Storage
+     */
+    const val firebaseStorageKtx = "com.google.firebase:firebase-storage-ktx"
+
 }

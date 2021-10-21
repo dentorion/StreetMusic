@@ -22,8 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.responce.AuthorizeResponse
+import com.example.streetmusic2.ui.authorizate.state.AuthorizeResponse
 import com.example.streetmusic2.ui.start.components.BackgroundImage
+import com.example.streetmusic2.util.user.LocalUserPref
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -37,17 +38,18 @@ import com.google.firebase.ktx.Firebase
 fun Authorize(
     viewModel: AuthorizeViewModel = hiltViewModel(),
     navToPreConcert: (String) -> Unit,
-    navToConcert: (String) -> Unit,
+    navToConcert: (artistId: String, documentId: String) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         BackgroundImage()
 
         Log.i("MyMusic", "7.Authorize")
+        val state = viewModel.authorizeState
 
-        when (val state = viewModel.authorizeState) {
+        when (state) {
             is AuthorizeResponse.Error -> {
                 Log.i("MyMusic", "7.Authorize.E")
-                ErrorAuth()
+                ErrorAuth(state.value)
             }
 
             is AuthorizeResponse.Initial -> {
@@ -66,49 +68,41 @@ fun Authorize(
 
             is AuthorizeResponse.Success -> {
                 Log.i("MyMusic", "7.Authorize.S")
-                state.user?.let { user ->
-                    viewModel.checkOnlineConcertByUser(user.uid)
-                }
+                SuccessAuth(state, viewModel)
             }
 
             is AuthorizeResponse.Navigate -> {
                 Log.i("MyMusic", "7.Authorize.N")
-                if (state.value) {
-                    Log.i(
-                        "MyMusic",
-                        "7.Authorize.CheckAndNavigate is running.[T] UID: ${state.userId}"
-                    )
-                    navToPreConcert(state.userId)
-                } else {
-                    Log.i(
-                        "MyMusic",
-                        "7.Authorize.CheckAndNavigate is running.[F] UID: ${state.userId}"
-                    )
-                    navToConcert(state.userId)
-                }
+                NavigateAuth(state, navToPreConcert, navToConcert)
             }
         }
     }
 }
 
 @Composable
-fun LoadAuth() {
-    Column(modifier = Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterHorizontally) {
-        CircularProgressIndicator(color = Color.White)
-        Text("Please, wait", color = Color.White)
+private fun NavigateAuth(
+    state: AuthorizeResponse.Navigate,
+    navToPreConcert: (String) -> Unit,
+    navToConcert: (artistId: String, documentId: String) -> Unit,
+) {
+    if (state.documentId.isNullOrEmpty()) {
+        navToPreConcert(state.artistId)
+    } else {
+        navToConcert(state.artistId, state.documentId)
     }
 }
 
 @Composable
-fun ErrorAuth() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.gradientBottom)),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = stringResource(R.string.error), color = Color.White)
+private fun SuccessAuth(
+    state: AuthorizeResponse.Success,
+    viewModel: AuthorizeViewModel
+) {
+    val userPref = LocalUserPref.current
+    state.user?.let { user ->
+        // Save user Id to userPref
+        userPref.setId(user.uid)
+        // Check if user has on-line concert -> go to PreConcert / Concert
+        viewModel.checkOnlineConcertByUser(artistId = user.uid)
     }
 }
 
@@ -118,8 +112,12 @@ private fun InitialAuth(
     checkOnLineConcertsByUser: (String) -> Unit,
     currentUser: FirebaseUser?
 ) {
-    Log.i("MyMusic", "7.Authorize.InitialAuth")
-
+    /**
+     *  If Artist is not authorized -> Show authorization composable
+     *  If Artist is authorized     -> Check for on-line concert:
+     *  Actual concert is -> navigate to Concert
+     *  No actual concert -> navigate to PreConcert
+     */
     if (currentUser != null) {
         checkOnLineConcertsByUser(currentUser.uid)
     } else {
@@ -194,6 +192,7 @@ fun AuthorizationContent(
                         .build()
 
                     val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                    googleSignInClient.revokeAccess()
                     launcher.launch(googleSignInClient.signInIntent)
                 },
                 content = {
@@ -222,5 +221,27 @@ fun AuthorizationContent(
                 }
             )
         }
+    }
+}
+
+@Composable
+fun LoadAuth() {
+    Column(modifier = Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterHorizontally) {
+        CircularProgressIndicator(color = Color.White)
+        Text("Please, wait", color = Color.White)
+    }
+}
+
+@Composable
+fun ErrorAuth(value: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.gradientBottom)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = stringResource(R.string.error), color = Color.White)
+        Text(text = value, color = Color.White)
     }
 }

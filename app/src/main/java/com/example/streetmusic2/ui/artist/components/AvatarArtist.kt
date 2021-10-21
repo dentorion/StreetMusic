@@ -7,17 +7,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 
 @Composable
-fun Avatar(artistAvatarUrl: String = "https://image.shutterstock.com/image-illustration/casual-young-black-girl-purple-260nw-1806646354.jpg") {
+fun Avatar(artistAvatar: String) {
     Image(
         painter = rememberImagePainter(
-            data = artistAvatarUrl,
+            data = artistAvatar,
             builder = { transformations(CircleCropTransformation()) }
         ),
         contentDescription = null,

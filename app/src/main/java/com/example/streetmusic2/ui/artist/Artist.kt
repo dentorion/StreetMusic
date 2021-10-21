@@ -22,13 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.streetmusic2.R
-import com.example.streetmusic2.common.model.concert.ConcertDomain
-import com.example.streetmusic2.common.model.responce.CommonResponse
+import com.example.streetmusic2.common.model.domain.ConcertDomain
+import com.example.streetmusic2.common.model.viewmodelstate.CommonResponse
 import com.example.streetmusic2.ui.artist.components.*
+import com.example.streetmusic2.util.time.LocalTimeUtil
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun Artist(
@@ -39,14 +38,14 @@ fun Artist(
 
     ArtistContent(
         state = viewModel.stateConcerts,
-        getConcert = { viewModel.getConcertsByArtisId(artistId = artistId) }
+        getConcertsByArtist = { viewModel.getConcertsByArtisId(artistId = artistId) }
     )
 }
 
 @Composable
 private fun ArtistContent(
     state: CommonResponse<Pair<List<ConcertDomain>, List<ConcertDomain>>>,
-    getConcert: () -> Unit
+    getConcertsByArtist: () -> Unit
 ) {
     Log.i("MyMusic", "2.ArtistContent")
 
@@ -58,8 +57,8 @@ private fun ArtistContent(
             val artistExpiredConcert = state.data.second
 
             /**
-             * Decide where band name, avatar, city, country should be taken from
-             * Active concert or last Finished concert
+             * Decide where band name, avatar, city, country should be taken: from
+             * Active concert (only one) or last Finished concert
              */
             val actualSourceOfArtistData = if (artistActiveConcert.isNotEmpty()) {
                 artistActiveConcert
@@ -70,7 +69,7 @@ private fun ArtistContent(
                 artistActiveConcertDomain = artistActiveConcert,
                 artistExpiredConcertDomain = artistExpiredConcert,
                 artistOnline = artistActiveConcert.isNotEmpty(),
-                artistName = actualSourceOfArtistData[0].name,
+                artistName = actualSourceOfArtistData[0].bandName,
                 artistAvatar = actualSourceOfArtistData[0].avatar,
                 artistCity = actualSourceOfArtistData[0].city,
                 artistCountry = actualSourceOfArtistData[0].country
@@ -78,18 +77,15 @@ private fun ArtistContent(
         }
         is CommonResponse.Error -> {
             Log.i("MyMusic", "2.ArtistContent.Error")
-
             Error()
         }
         is CommonResponse.Initial -> {
             Log.i("MyMusic", "2.ArtistContent.Initial")
-
             Loading()
-            getConcert()
+            getConcertsByArtist()
         }
         is CommonResponse.Load -> {
             Log.i("MyMusic", "2.ArtistContent.Load")
-
             Loading()
         }
     }
@@ -122,7 +118,13 @@ fun Success(
         /**
          * HEADER
          */
-        Header(artistAvatar, artistOnline, artistName, artistCity, artistCountry)
+        Header(
+            artistAvatar = artistAvatar,
+            artistOnline = artistOnline,
+            artistName = artistName,
+            artistCity = artistCity,
+            artistCountry = artistCountry
+        )
 
         /**
          * Small pink line between Recycler and buttons
@@ -205,7 +207,7 @@ private fun Header(
     artistOnline: Boolean,
     artistName: String,
     artistCity: String,
-    artistCountry: String
+    artistCountry: String,
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -236,6 +238,8 @@ private fun Header(
 
 @Composable
 private fun DescriptionOnlineConcert(concertDomain: ConcertDomain, color: Color) {
+    val timeUtil = LocalTimeUtil.current
+
     Row(
         modifier = Modifier
             .padding(vertical = 20.dp)
@@ -256,27 +260,17 @@ private fun DescriptionOnlineConcert(concertDomain: ConcertDomain, color: Color)
                 .fillMaxHeight()
                 .padding(start = 10.dp)
         ) {
-            Row {
-                Text(
-                    text =
-                    SimpleDateFormat(
-                        "dd.MM.yy",
-                        Locale.getDefault()
-                    ).format(concertDomain.timeStart)
-                            + " / " +
-                            SimpleDateFormat(
-                                "HH:mm",
-                                Locale.getDefault()
-                            ).format(concertDomain.timeStart)
-                            + " - " +
-                            SimpleDateFormat(
-                                "HH:mm",
-                                Locale.getDefault()
-                            ).format(concertDomain.timeStop),
-                    color = Color.White,
-                    fontSize = 14.sp,
-                )
-            }
+            Text(
+                text = timeUtil.getStartDateString(concertDomain.create.time),
+                color = Color.White,
+                fontSize = 24.sp,
+            )
+            Text(
+                text = concertDomain.create.toString(),
+                color = Color.Yellow,
+                fontSize = 21.sp,
+                letterSpacing = 4.sp,
+            )
             if (concertDomain.address.isNotEmpty()) {
                 Text(
                     text = concertDomain.address,

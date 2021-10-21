@@ -44,24 +44,28 @@ class NavActions(navController: NavHostController) {
                     oldValue = "{$argument0}",
                     newValue = artistId
                 )
-            ){
-                popUpTo(route = NavScreen.StartScreen.route)
-            }
-        }
-    }
-
-    val navigateToConcert: (String) -> Unit = { artistId: String ->
-        NavScreen.Concert.apply {
-            navController.navigate(
-                route = routeWithArgument.replace(
-                    oldValue = "{$argument0}",
-                    newValue = artistId
-                )
             ) {
                 popUpTo(route = NavScreen.StartScreen.route)
             }
         }
     }
+
+    val navigateToConcert: (userId: String, documentId: String) -> Unit =
+        { userId: String, documentId: String ->
+            NavScreen.Concert.apply {
+                navController.navigate(
+                    route = routeWithArgument.replace(
+                        oldValue = "{$argument0}",
+                        newValue = userId,
+                    ).replace(
+                        oldValue = "{$argument1}",
+                        newValue = documentId,
+                    )
+                ) {
+                    popUpTo(route = NavScreen.StartScreen.route)
+                }
+            }
+        }
 
     val navigateToStart: () -> Unit = {
         NavScreen.StartScreen.apply {
@@ -69,9 +73,5 @@ class NavActions(navController: NavHostController) {
                 popUpTo(route = NavScreen.StartScreen.route)
             }
         }
-    }
-
-    val upPress: () -> Unit = {
-        navController.navigateUp()
     }
 }
