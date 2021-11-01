@@ -46,6 +46,7 @@ object Versions {
     /**
      * Map
      */
+    const val gmsPlayServicesLocation = "18.0.0"
     const val places = "2.4.0"
     const val volley = "1.2.0"
 
@@ -62,4 +63,9 @@ object Versions {
      * Room
      */
     const val room = "2.3.0"
+
+    /**
+     * Auth
+     */
+    const val googleAuth = "19.2.0"
 }

@@ -41,7 +41,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(gson: Gson, client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://worldtimeapi.org/api/timezone/Europe/")
+            .baseUrl("http://worldtimeapi.org/api/timezone/Europe/")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

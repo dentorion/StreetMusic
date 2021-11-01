@@ -11,4 +11,5 @@ object Dependencies {
     val map = Map
     val firebase = Firebase
     val room = Room
+    val auth = Auth
 }

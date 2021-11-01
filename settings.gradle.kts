@@ -5,6 +5,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Street Music 2"
+rootProject.name = "Street Music"
 include (":app")
 include(":network")

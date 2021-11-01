@@ -34,8 +34,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -50,7 +50,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.2"
+        kotlinCompilerExtensionVersion = "1.0.3"
     }
 }
 
@@ -58,6 +58,12 @@ dependencies {
 
     // Retrofit for server api
     implementation(project(mapOf("path" to ":network")))
+
+    // Check what to dell
+    implementation("com.google.android.libraries.maps:maps:3.1.0-beta")
+    implementation("com.google.maps.android:maps-v3-ktx:3.2.0")
+    implementation("androidx.fragment:fragment:1.3.6")
+    implementation("androidx.fragment:fragment-ktx:1.3.6")
 
     Dependencies.base.apply {
         implementation (coreKtx)
@@ -117,7 +123,10 @@ dependencies {
         implementation(ktx)
         kapt(compiler)
     }
-    implementation("com.google.android.gms:play-services-auth:19.2.0")
+
+    Dependencies.auth.apply {
+        implementation(googleAuth)
+    }
 }
 
 kapt {

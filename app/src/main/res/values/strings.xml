@@ -1,23 +1,53 @@
 <resources>
-    <string name="app_name">Street Music 2</string>
+    <!-- Common -->
+    <string name="app_name">Street Music</string>
 
     <string name="facebook_app_id">564028241414184</string>
     <string name="fb_login_protocol_scheme">fb564028241414184</string>
 
+    <!-- Start screen -->
+    <string name="im_artist_button_label">I\'M PLAYING NOW</string>
+    <string name="find_music_button_label">FIND GOOD STREET MUSIC</string>
+
     <!-- Permission -->
-    <string name="error_location">Error while getting location. Please try again later.</string>
+    <string name="error_location">Error while getting location.\nPlease try again later.</string>
     <string name="need_permission">For correct work app need to get your location.</string>
-    <string name="why_question">WHY DO WE ASK THIS?</string>
-    <string name="localize_me">LOCALIZE ME</string>
+    <string name="please_wait_perm">Please wait</string>
+    <string name="why_question_button_label">WHY DO WE ASK THIS?</string>
+    <string name="localize_me_button_label">LOCALIZE ME</string>
 
     <!-- Concerts city -->
     <string name="no_concerts_in_city">Unfortunately, no concerts</string>
     <string name="error">Unfortunately, error has happened</string>
+    <string name="all_concerts_label">All concerts in</string>
+    <string name="active_concerts_label">Active</string>
+    <string name="finished_concerts_label">Finished</string>
+    <string name="now_playing">NOW PLAYING"</string>
+    <string name="last_playing">LAST PLAYING</string>
+
+    <!-- Artist screen -->
+    <string name="started">Started</string>
+    <string name="at"> at </string>
+
+    <!-- Authorization -->
+    <string name="sign_in_with">Sign in with:</string>
+    <string name="google_name_button_label">Google</string>
+    <string name="please_wait_auth">Please wait</string>
 
     <!-- Pre Concert -->
     <string name="error_pre_concert">Error happened. Please try again later.</string>
+    <string name="please_wait_pre">Please wait</string>
+    <string name="label_name">Band Name</string>
+    <string name="label_address">Concert address</string>
+    <string name="label_description">Describe in few words</string>
+    <string name="start_concert_button_label">START CONCERT</string>
 
     <string name="dialog_ok_concert">OK</string>
     <string name="main_text">Give us more information please!</string>
+
+    <!-- Concert screen -->
+    <string name="auto_stop">AUTO STOP: </string>
+    <string name="stop_concert_button_label">STOP CONCERT</string>
+    <string name="please_wait_concert">Please, wait</string>
 
 </resources>
