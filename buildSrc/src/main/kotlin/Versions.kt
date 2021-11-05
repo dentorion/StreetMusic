@@ -68,4 +68,14 @@ object Versions {
      * Auth
      */
     const val googleAuth = "19.2.0"
+
+    /**
+     * Timber
+     */
+    const val timber = "5.0.1"
+
+    /**
+     * Image compressor
+     */
+    const val compressor = "3.0.1"
 }

@@ -1,9 +1,9 @@
 <resources>
     <!-- Common -->
-    <string name="app_name">Street Music</string>
+    <string name="app_name" translatable="false">Street Music</string>
 
-    <string name="facebook_app_id">564028241414184</string>
-    <string name="fb_login_protocol_scheme">fb564028241414184</string>
+    <string name="facebook_app_id" translatable="false">564028241414184</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb564028241414184</string>
 
     <!-- Start screen -->
     <string name="im_artist_button_label">I\'M PLAYING NOW</string>
@@ -31,8 +31,9 @@
 
     <!-- Authorization -->
     <string name="sign_in_with">Sign in with:</string>
-    <string name="google_name_button_label">Google</string>
+    <string name="google_name_button_label" translatable="false">Google</string>
     <string name="please_wait_auth">Please wait</string>
+    <string name="sign_in_fail">Google sign in failed</string>
 
     <!-- Pre Concert -->
     <string name="error_pre_concert">Error happened. Please try again later.</string>
@@ -41,13 +42,35 @@
     <string name="label_address">Concert address</string>
     <string name="label_description">Describe in few words</string>
     <string name="start_concert_button_label">START CONCERT</string>
-
-    <string name="dialog_ok_concert">OK</string>
     <string name="main_text">Give us more information please!</string>
 
     <!-- Concert screen -->
     <string name="auto_stop">AUTO STOP: </string>
     <string name="stop_concert_button_label">STOP CONCERT</string>
     <string name="please_wait_concert">Please, wait</string>
+
+    <!-- Util. Coordinates -->
+    <string name="error_coord">Coordinates: Error total</string>
+    <string name="error_permissions">Coordinates: Error of permissions 1</string>
+    <string name="error_permissions2">Coordinates: Error of permissions 2</string>
+
+    <!-- Util. Geocoding -->
+    <string name="error_geo">Unable connect to Geocoder</string>
+
+    <!-- Dialog OK button -->
+    <string name="dialog_ok_button" translatable="false">OK</string>"
+
+    <!-- Dialog. Permissions. -->
+    <string name="dialog_permissions">Application will show you street musicians according to your gps location. It\'s totally safe and secure.</string>
+
+    <!-- Dialog. MapObserve -->
+    <string name="dialog_map">Choose a musician and follow star band!</string>
+
+    <!-- Dialog. PreConcertError -->
+    <string name="dialog_pre_concert">Please fill all fields and choose music style.</string>
+
+    <!-- MapObserve -->
+    <string name="back_to_list">Back to list</string>
+    <string name="now_playing_map">Now playing:</string>
 
 </resources>
