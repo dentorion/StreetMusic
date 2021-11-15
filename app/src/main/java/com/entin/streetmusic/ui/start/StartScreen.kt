@@ -5,21 +5,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.entin.streetmusic.common.theme.StreetMusicTheme
-import com.entin.streetmusic.ui.start.components.BackgroundImage
-import com.entin.streetmusic.ui.start.components.FindMusicButton
-import com.entin.streetmusic.ui.start.components.Logo
-import com.entin.streetmusic.ui.start.components.MusicianButton
+import com.entin.streetmusic.ui.start.components.*
+import com.entin.streetmusic.util.auth.createAnonymousUser
 import com.google.accompanist.insets.navigationBarsPadding
 
 @Composable
 fun StartScreen(
     navToPermissions: () -> Unit,
 ) {
-    StartContent(navToPermissions = navToPermissions)
+    createAnonymousUser()
+    StartScreenContent(navToPermissions = navToPermissions)
 }
 
 @Composable
-private fun StartContent(navToPermissions: () -> Unit) {
+private fun StartScreenContent(navToPermissions: () -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

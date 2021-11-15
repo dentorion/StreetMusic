@@ -11,7 +11,6 @@ class ServerUnixTime @Inject constructor(
     /**
      * Result in SECONDS
      */
-    suspend fun get(): Long {
-        return apiService.getServerUnixTime().unixtime.toLong()
-    }
+    suspend fun get(): Long =
+        apiService.getServerUnixTime().result.toLong()
 }

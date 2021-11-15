@@ -1,12 +1,10 @@
 package com.entin.streetmusic.util.location
 
 import android.content.Context
-import android.content.res.Resources
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import com.entin.streetmusic.BuildConfig
-import com.entin.streetmusic.R
 import com.google.android.libraries.places.api.Places
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
@@ -22,7 +20,7 @@ import javax.inject.Inject
 class ReverseGeocoding @Inject constructor(@ApplicationContext private val application: Context) {
 
     suspend fun requestCity(location: Location) = flow {
-        Places.initialize(application.applicationContext, BuildConfig.GMP_KEY)
+        Places.initialize(application.applicationContext, BuildConfig.MAPS_API_KEY)
         Places.createClient(application.applicationContext)
         val mGeocoder = Geocoder(application.applicationContext, Locale.ENGLISH)
 
@@ -39,7 +37,7 @@ class ReverseGeocoding @Inject constructor(@ApplicationContext private val appli
                 )
             )
         } catch (e: IOException) {
-            Timber.log(Log.ERROR, Resources.getSystem().getString(R.string.error_geo))
+            Timber.log(Log.ERROR, e.message.toString())
         }
     }.flowOn(Dispatchers.IO)
 }

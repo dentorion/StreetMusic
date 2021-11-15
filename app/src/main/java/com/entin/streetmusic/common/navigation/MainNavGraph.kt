@@ -1,5 +1,6 @@
 package com.entin.streetmusic.common.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -20,8 +21,11 @@ import com.entin.streetmusic.ui.preconcert.PreConcert
 import com.entin.streetmusic.ui.start.StartScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import timber.log.Timber
 
+@InternalCoroutinesApi
+@ExperimentalAnimationApi
 @coil.annotation.ExperimentalCoilApi
 @ExperimentalCoroutinesApi
 @ExperimentalPermissionsApi
@@ -46,7 +50,9 @@ fun MainNavGraph(navController: NavHostController) {
          * LISTENER
          */
 
-        composable(NavScreen.StartScreen.route) {
+        composable(
+            NavScreen.StartScreen.route
+        ) {
             Timber.i("Navigation Graph.StartScreen")
             StartScreen(
                 navToPermissions = actions.navigateToPermissions

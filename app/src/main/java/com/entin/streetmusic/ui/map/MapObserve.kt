@@ -22,8 +22,8 @@ import com.entin.streetmusic.common.model.domain.ConcertDomain
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.artist.components.IconCircle
 import com.entin.streetmusic.ui.cityconcerts.CityConcertsViewModel
-import com.entin.streetmusic.util.map.awaitMap
-import com.entin.streetmusic.util.map.rememberMapViewWithLifecycle
+import com.entin.streetmusic.ui.map.utils.awaitMap
+import com.entin.streetmusic.ui.map.utils.rememberMapViewWithLifecycle
 import com.entin.streetmusic.util.user.LocalUserPref
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -43,6 +43,8 @@ fun MapObserve(
     Timber.i("Map ViewModel hash : " + viewModel.hashCode())
 
     val concerts = viewModel.onlineConcertsForMap
+    val openDialog = remember { mutableStateOf(false) }
+
     /**
      * Read locations from viewModel and set them on the map
      */
@@ -64,7 +66,8 @@ fun MapObserve(
             BottomMenu(
                 navToCityConcerts = navToCityConcerts,
                 navToArtistPage = { navToArtistPage(it) },
-                concerts = concerts
+                concerts = concerts,
+                alertState = openDialog
             )
         }
     }
@@ -142,9 +145,8 @@ private fun BottomMenu(
     navToCityConcerts: () -> Unit,
     navToArtistPage: (String) -> Unit,
     concerts: List<ConcertDomain>,
+    alertState: MutableState<Boolean>,
 ) {
-    val openDialog = remember { mutableStateOf(false) }
-
     Box(
         modifier = Modifier
             .clip(StreetMusicTheme.shapes.small)
@@ -169,10 +171,10 @@ private fun BottomMenu(
             }
 
             ListButton(
-                openDialog = openDialog,
                 concerts = concerts,
                 navToArtistPage = navToArtistPage,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                alertState = alertState
             )
         }
     }
@@ -180,11 +182,14 @@ private fun BottomMenu(
 
 @Composable
 private fun ListButton(
-    openDialog: MutableState<Boolean>,
     concerts: List<ConcertDomain>,
     navToArtistPage: (String) -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    alertState: MutableState<Boolean>
 ) {
+    val openDialog = remember { mutableStateOf(alertState.value) }
+    openDialog.value = alertState.value
+
     OutlinedButton(
         modifier = modifier,
         onClick = {
@@ -212,16 +217,17 @@ private fun ListButton(
                 painter = painterResource(id = R.drawable.ic_menu),
                 contentDescription = null,
             )
+
             if (openDialog.value) {
                 DialogWindow(
-                    dialogState = openDialog,
                     dialogType = DialogType.MapObserve(),
                     content = {
                         DialogMapObserve(
                             listArtist = concerts,
-                            navToMusicianPage = navToArtistPage
+                            navToMusicianPage = navToArtistPage,
                         )
-                    }
+                    },
+                    openDialogState = openDialog,
                 )
             }
         }

@@ -5,13 +5,16 @@ package com.entin.streetmusic.util.firebase.constant
  */
 
 // Firebase collection named "concerts"
-const val CONCERTS_COLLECTION: String = "concerts"
+const val CONCERTS_NAME_HILT = "concerts"
 
 // Firebase collection named "users"
-const val USERS_COLLECTION: String = "users"
+const val USERS_NAME_HILT = "users"
+
+// Firebase collection named "avatars"
+const val AVATARS_NAME_HILT = "avatars"
 
 // Firebase collection named "errors"
-const val ERRORS_COLLECTION: String = "errors"
+const val ERROR_NAME_HILT = "errors"
 
 /**
  * 1 Hour in mls
@@ -20,7 +23,17 @@ const val ERRORS_COLLECTION: String = "errors"
 const val HOUR_ONE_MLS: Long = 3600000L
 
 /**
- * Fire base document's fields
+ * Artist avatar url default
+ */
+const val DEFAULT_URL_AVATAR = "https://firebasestorage.googleapis.com/v0/b/street-music-a5abd.appspot.com/o/avatar-default.jpg?alt=media&token=e27a9209-add3-4761-b571-067216c6fc89"
+
+/**
+ * Fire base avatar's fields
+ */
+const val FIELD_AVATAR_URL = "avatarUrl"
+
+/**
+ * Fire base concert's fields
  */
 
 // "artist_id"

@@ -9,4 +9,7 @@ object Retrofit {
      */
     const val gson = "com.squareup.retrofit2:converter-gson:${Versions.gson}"
 
+    const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+
+    const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
 }

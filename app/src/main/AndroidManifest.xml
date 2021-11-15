@@ -9,18 +9,18 @@
 
     <application
         android:name="com.entin.streetmusic.common.application.SMApplication"
-        android:allowBackup="true"
-        android:usesCleartextTraffic="true"
+        android:fullBackupOnly="true"
+        android:usesCleartextTraffic="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.StreetMusicBaseStyle">
+        android:theme="@style/Theme.StreetMusicBaseStyle"
+        android:allowBackup="true">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAeHE2y4AdTLL07UxSL1S7_8Vl0g0gM4i4" />
-<!--        android:value="${GMP_KEY}" />-->
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name="com.entin.streetmusic.ui.activity.MainActivity"

@@ -34,7 +34,7 @@ fun Concert(
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         BackgroundImage()
 
-        when (val uiState = viewModel.stateConcert) {
+        when (val uiState = viewModel.uiStateConcert) {
             is CommonResponse.Error -> ErrorConcert(uiState.message)
             is CommonResponse.Initial -> InitialConcert(
                 avatarUrl = viewModel.avatarUrl,

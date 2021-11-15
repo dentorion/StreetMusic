@@ -2,9 +2,8 @@ package com.entin.streetmusic.util.database.di
 
 import android.content.Context
 import androidx.room.Room
-import com.entin.streetmusic.util.database.avatar.AvatarDAO
-import com.entin.streetmusic.util.database.checkfavourite.FavouritesDAO
 import com.entin.streetmusic.util.database.DataBaseRoom
+import com.entin.streetmusic.util.database.favourite.FavouritesDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,10 +34,6 @@ object DataBaseModule {
     @Singleton
     @Provides
     fun provideFavouritesDAO(db: DataBaseRoom): FavouritesDAO = db.favouritesDao()
-
-    @Singleton
-    @Provides
-    fun provideAvatarDAO(db: DataBaseRoom): AvatarDAO = db.avatarDao()
 
     @Named("AppCoroutine")
     @Singleton

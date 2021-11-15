@@ -9,6 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
@@ -23,7 +25,7 @@ import com.entin.streetmusic.common.theme.StreetMusicTheme
 
 /**
  * Dialog Window
- * [dialogState] - show / hide dialog window
+ * openDialogState - show / hide dialog window
  * [dialogType] - screen where dialog is shown
  *
  * Depending on [dialogType] Dialog Window has different:
@@ -34,16 +36,17 @@ import com.entin.streetmusic.common.theme.StreetMusicTheme
 
 @Composable
 fun DialogWindow(
-    dialogState: MutableState<Boolean>,
     dialogType: DialogType,
     onOkClicked: (() -> Unit)? = null,
     onDismissRequest: (() -> Unit)? = null,
     content: @Composable () -> Unit = { DefaultContent(value = dialogType) },
+    openDialogState: MutableState<Boolean>,
 ) {
+
     when (dialogType) {
         is DialogType.Permissions -> {
             Dialog(
-                dialogState = dialogState,
+                dialogState = openDialogState,
                 onDialogPositiveButtonClicked = onOkClicked,
                 onDismissRequest = onDismissRequest,
                 title = "Location permissions",
@@ -52,7 +55,7 @@ fun DialogWindow(
         }
         is DialogType.MapObserve -> {
             Dialog(
-                dialogState = dialogState,
+                dialogState = openDialogState,
                 onDialogPositiveButtonClicked = onOkClicked,
                 onDismissRequest = onDismissRequest,
                 title = "Musicians list",
@@ -61,7 +64,7 @@ fun DialogWindow(
         }
         is DialogType.PreConcertError -> {
             Dialog(
-                dialogState = dialogState,
+                dialogState = openDialogState,
                 onDialogPositiveButtonClicked = onOkClicked,
                 onDismissRequest = onDismissRequest,
                 title = "Misunderstanding",

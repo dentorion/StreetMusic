@@ -34,37 +34,52 @@ fun Authorize(
         BackgroundImage()
 
         Timber.i("Authorize")
-        val state = viewModel.authorizeState
+        val uiAuthorizationState = viewModel.uiAuthorizeState
 
-        when (state) {
-            is AuthorizeResponse.Error -> {
-                Timber.i("Authorize.E")
-                ErrorAuth(state.value)
-            }
+        AuthorizeContent(
+            state = uiAuthorizationState,
+            viewModel = viewModel,
+            navToPreConcert = navToPreConcert,
+            navToConcert = navToConcert
+        )
+    }
+}
 
-            is AuthorizeResponse.Initial -> {
-                Timber.i("Authorize.I")
-                InitialAuth(
-                    currentUser = Firebase.auth.currentUser,
-                    signWithCredential = { viewModel.signWithCredential(it) },
-                    checkOnLineConcertsByUser = { viewModel.checkOnlineConcertByUser(it) },
-                )
-            }
+@Composable
+private fun AuthorizeContent(
+    state: AuthorizeResponse,
+    viewModel: AuthorizeViewModel,
+    navToPreConcert: (String) -> Unit,
+    navToConcert: (artistId: String, documentId: String) -> Unit,
+    ) {
+    when (state) {
+        is AuthorizeResponse.Error -> {
+            Timber.i("Authorize.E")
+            ErrorAuth(state.value)
+        }
 
-            is AuthorizeResponse.Load -> {
-                Timber.i("Authorize.L")
-                LoadAuth()
-            }
+        is AuthorizeResponse.Initial -> {
+            Timber.i("Authorize.I")
+            InitialAuth(
+                currentUser = Firebase.auth.currentUser,
+                signWithCredential = { viewModel.linkAnonymousToAccount(it) },
+                checkOnLineConcertsByUser = { viewModel.checkOnlineConcertByUser(it) },
+            )
+        }
 
-            is AuthorizeResponse.Success -> {
-                Timber.i("Authorize.S")
-                SuccessAuth(state, viewModel)
-            }
+        is AuthorizeResponse.Load -> {
+            Timber.i("Authorize.L")
+            LoadAuth()
+        }
 
-            is AuthorizeResponse.Navigate -> {
-                Timber.i("Authorize.N")
-                NavigateAuth(state, navToPreConcert, navToConcert)
-            }
+        is AuthorizeResponse.Success -> {
+            Timber.i("Authorize.S")
+            SuccessAuth(state, viewModel)
+        }
+
+        is AuthorizeResponse.Navigate -> {
+            Timber.i("Authorize.N")
+            NavigateAuth(state, navToPreConcert, navToConcert)
         }
     }
 }
@@ -103,15 +118,22 @@ private fun InitialAuth(
     currentUser: FirebaseUser?
 ) {
     /**
-     *  If Artist is not authorized -> Show authorization composable
-     *  If Artist is authorized     -> Check for on-line concert:
-     *  - Actual concert is -> navigate to Concert
-     *  - No actual concert -> navigate to PreConcert
+     * If user == null or anon -> check can this user be upgraded to normal auth user
+     *                           canUpgradeAnonymous()
+     *                           If yes -> split anon account with auth account
+     *                           If no  -> auth in normal way
+     *                           AuthorizationContent()
+     * If user != null or anon -> check artist for on-line concert
+     *                           If yes -> navigate to Concert
+     *                           If no  -> navigate to PreConcert
      */
-    if (currentUser != null) {
-        checkOnLineConcertsByUser(currentUser.uid)
-    } else {
+
+    if (currentUser == null || currentUser.isAnonymous) {
+        Timber.i("currentUser == null || currentUser.isAnonymous")
         AuthorizationContent(signWithCredential = { signWithCredential(it) })
+    } else {
+        Timber.i("currentUser != null || !currentUser.isAnonymous")
+        checkOnLineConcertsByUser(currentUser.uid)
     }
 }
 
@@ -144,6 +166,6 @@ fun ErrorAuth(value: String) {
             text = stringResource(R.string.error),
             color = StreetMusicTheme.colors.white
         )
-        Text(text = value, color = StreetMusicTheme.colors.white)
+        Text(text = ": $value", color = StreetMusicTheme.colors.white)
     }
 }

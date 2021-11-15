@@ -1,6 +1,11 @@
 package dependencies
 
 object Accompanist {
+
+    /**
+     * Animations navigation
+     */
+    const val animation = "com.google.accompanist:accompanist-navigation-animation:${Versions.animation}"
     /**
      * Permissions
      */

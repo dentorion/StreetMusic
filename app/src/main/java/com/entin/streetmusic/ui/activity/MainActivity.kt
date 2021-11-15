@@ -3,6 +3,7 @@ package com.entin.streetmusic.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -14,6 +15,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import com.entin.streetmusic.common.navigation.MainNavGraph
 import com.entin.streetmusic.common.theme.StreetMusicTheme
+import com.entin.streetmusic.util.auth.createAnonymousUser
+import com.entin.streetmusic.util.auth.deleteAnonymousUser
 import com.entin.streetmusic.util.time.LocalTimeUtil
 import com.entin.streetmusic.util.time.TimeUtil
 import com.entin.streetmusic.util.user.LocalUserPref
@@ -25,6 +28,7 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
 @ExperimentalCoilApi
@@ -40,6 +44,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var timeUtil: TimeUtil
 
+    @InternalCoroutinesApi
+    @ExperimentalAnimationApi
     @ExperimentalCoilApi
     @ExperimentalCoroutinesApi
     @ExperimentalPermissionsApi
@@ -74,6 +80,22 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * Creating anon user to get concerts list
+     */
+    override fun onRestart() {
+        super.onRestart()
+        createAnonymousUser()
+    }
+
+    /**
+     * Delete anon user if normal exit
+     */
+    override fun onStop() {
+        super.onStop()
+        deleteAnonymousUser()
     }
 }
 

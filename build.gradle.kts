@@ -1,23 +1,19 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    val kotlinVersion = "1.5.30"
-    val gradleVersion = "7.1.0-alpha05"
-    val hiltVersion = "2.38.1"
-    val googleServicesVersion = "4.3.10"
-
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath ("com.android.tools.build:gradle:$gradleVersion")
-        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath ("com.google.dagger:hilt-android-gradle-plugin:$hiltVersion")
-        classpath ("com.google.gms:google-services:$googleServicesVersion")
-        classpath ("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
+        classpath("com.android.tools.build:gradle:${Android.gradleVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Android.kotlinVersion}")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:${Android.hiltVersion}")
+        classpath("com.google.gms:google-services:${Android.googleServicesVersion}")
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.0")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:${Android.crashlytics}")
+        classpath("com.android.tools.build:gradle:3.4.3")
+        classpath("com.google.firebase:perf-plugin:1.4.0")
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 

@@ -6,10 +6,12 @@ plugins {
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
     // Secret
-    id("com.google.secrets_gradle_plugin") version ("0.4")
+    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
     // Firebase
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 
 }
 
@@ -18,7 +20,7 @@ android {
     buildToolsVersion = Android.buildTools
 
     defaultConfig {
-        applicationId = "com.example.streetmusic2"
+        applicationId = "com.entin.streetmusic"
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk
         versionCode = 1
@@ -60,15 +62,15 @@ dependencies {
     implementation(project(mapOf("path" to ":network")))
 
     Dependencies.base.apply {
-        implementation (coreKtx)
-        implementation (appcompat)
-        implementation (material)
-        implementation (lifecycle)
+        implementation(coreKtx)
+        implementation(appcompat)
+        implementation(material)
+        implementation(lifecycle)
 
-        testImplementation (jUnit)
-        androidTestImplementation (jUnitTest)
-        androidTestImplementation (espresso)
-        androidTestImplementation (jUnitTestCompose)
+        testImplementation(jUnit)
+        androidTestImplementation(jUnitTest)
+        androidTestImplementation(espresso)
+        androidTestImplementation(jUnitTestCompose)
     }
 
     Dependencies.hilt.apply {
@@ -110,6 +112,7 @@ dependencies {
         implementation(crashlytics)
         implementation(analytics)
         implementation(firebaseStorageKtx)
+        implementation(performance)
     }
 
     Dependencies.room.apply {

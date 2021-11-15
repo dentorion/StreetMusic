@@ -25,7 +25,6 @@ data class ConcertDomain(
      */
     val artistId: String = "",
     val bandName: String = "",
-//    val avatar: String = "",
     val styleMusic: MusicType = MusicType.None,
     val address: String = "",
     val description: String = "",

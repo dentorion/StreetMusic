@@ -6,6 +6,6 @@ import retrofit2.http.GET
 interface TimeUtcApiService {
 
     // GET UTC SERVER API
-    @GET("Warsaw/")
+    @GET("serverTimeStamp")
     suspend fun getServerUnixTime(): ServerTimeUtcResponse
 }

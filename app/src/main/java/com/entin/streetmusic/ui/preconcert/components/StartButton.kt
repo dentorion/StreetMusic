@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import com.entin.streetmusic.R
 import com.entin.streetmusic.ui.preconcert.PreConcertViewModel
 import com.entin.streetmusic.common.theme.StreetMusicTheme
+import com.entin.streetmusic.util.time.LocalTimeUtil
 import com.entin.streetmusic.util.time.TimeUtil
 import com.entin.streetmusic.util.user.LocalUserPref
 import com.entin.streetmusic.util.user.UserSession
@@ -19,7 +20,7 @@ import com.entin.streetmusic.util.user.UserSession
 fun StartButton(
     viewModel: PreConcertViewModel,
     artisId: String,
-    timeUtil: TimeUtil
+    timeUtil: TimeUtil = LocalTimeUtil.current
 ) {
     val userPref = LocalUserPref.current
 

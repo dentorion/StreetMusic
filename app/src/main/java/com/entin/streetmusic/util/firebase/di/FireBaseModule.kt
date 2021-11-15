@@ -1,11 +1,9 @@
 package com.entin.streetmusic.util.firebase.di
 
-import com.entin.streetmusic.common.constants.CONCERTS_NAME_HILT
-import com.entin.streetmusic.common.constants.ERROR_NAME_HILT
-import com.entin.streetmusic.common.constants.USERS_NAME_HILT
-import com.entin.streetmusic.util.firebase.constant.CONCERTS_COLLECTION
-import com.entin.streetmusic.util.firebase.constant.ERRORS_COLLECTION
-import com.entin.streetmusic.util.firebase.constant.USERS_COLLECTION
+import com.entin.streetmusic.util.firebase.constant.AVATARS_NAME_HILT
+import com.entin.streetmusic.util.firebase.constant.CONCERTS_NAME_HILT
+import com.entin.streetmusic.util.firebase.constant.ERROR_NAME_HILT
+import com.entin.streetmusic.util.firebase.constant.USERS_NAME_HILT
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -27,7 +25,7 @@ object FireBaseModule {
     @Provides
     @Singleton
     fun provideFirebaseConcerts(): CollectionReference =
-        Firebase.firestore.collection(CONCERTS_COLLECTION)
+        Firebase.firestore.collection(CONCERTS_NAME_HILT)
 
     /**
      * Users collection
@@ -36,7 +34,16 @@ object FireBaseModule {
     @Provides
     @Singleton
     fun provideFirebaseUsers(): CollectionReference =
-        Firebase.firestore.collection(USERS_COLLECTION)
+        Firebase.firestore.collection(USERS_NAME_HILT)
+
+    /**
+     * Avatars collection
+     */
+    @Named(AVATARS_NAME_HILT)
+    @Provides
+    @Singleton
+    fun provideFirebaseAvatars(): CollectionReference =
+        Firebase.firestore.collection(AVATARS_NAME_HILT)
 
     /**
      * Errors collection
@@ -45,5 +52,5 @@ object FireBaseModule {
     @Provides
     @Singleton
     fun provideFirebaseErrors(): CollectionReference =
-        Firebase.firestore.collection(ERRORS_COLLECTION)
+        Firebase.firestore.collection(ERROR_NAME_HILT)
 }

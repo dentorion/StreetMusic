@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.entin.streetmusic.common.model.domain.ConcertDomain
 import com.entin.streetmusic.common.model.music.MusicType
 import com.entin.streetmusic.common.model.vmstate.CommonResponse
-import com.entin.streetmusic.util.firebase.ConcertsByCityStyleQueries
+import com.entin.streetmusic.util.firebase.concerts.queries.ConcertsByCityStyleQueries
 import com.entin.streetmusic.util.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

@@ -6,9 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,11 +20,13 @@ import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.artist.components.StatusOnline
 import com.entin.streetmusic.ui.preconcert.components.*
 import com.entin.streetmusic.ui.start.components.BackgroundImage
-import com.entin.streetmusic.util.time.LocalTimeUtil
 import com.entin.streetmusic.util.user.LocalUserPref
 import com.google.accompanist.insets.imePadding
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 
+@InternalCoroutinesApi
 @ExperimentalCoilApi
 @Composable
 fun PreConcert(
@@ -34,6 +34,44 @@ fun PreConcert(
     artistId: String,
     navToConcert: (String, String) -> Unit,
     navToMain: () -> Unit,
+) {
+    // UiState
+    val uiState = viewModel.uiStatePreConcert
+    PreConcertContent(uiState, viewModel, artistId, navToConcert, navToMain)
+
+    // Alert
+    val alertWindow = remember { mutableStateOf(false) }
+
+    LaunchedEffect(true) {
+        viewModel.alertState.collect {
+            when (it) {
+                true -> alertWindow.value = true
+            }
+        }
+    }
+
+    // Dialog
+    ShowAlertPreConcert(alertWindow)
+}
+
+@Composable
+fun ShowAlertPreConcert(alertWindow: MutableState<Boolean>) {
+    if (alertWindow.value) {
+        DialogWindow(
+            dialogType = DialogType.PreConcertError(),
+            openDialogState = alertWindow,
+        )
+    }
+}
+
+@ExperimentalCoilApi
+@Composable
+private fun PreConcertContent(
+    uiState: CommonResponse<String>,
+    viewModel: PreConcertViewModel,
+    artistId: String,
+    navToConcert: (String, String) -> Unit,
+    navToMain: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -44,27 +82,24 @@ fun PreConcert(
         BackgroundImage()
 
         Timber.i("PreConcert")
-        val uiState = viewModel.statePreConcert
 
         when (uiState) {
-            is CommonResponse.Error -> InitialPreConcert(
-                viewModel = viewModel,
-                artistId = artistId,
-                navToMain = navToMain,
-                uploadAvatar = { viewModel.avatarUploadAndSaveDb(it, artistId) },
-                errorState = true
-            )
+            is CommonResponse.Error -> ErrorPreConcert()
             is CommonResponse.Initial -> InitialPreConcert(
                 viewModel = viewModel,
                 artistId = artistId,
                 navToMain = navToMain,
                 uploadAvatar = { viewModel.avatarUploadAndSaveDb(it, artistId) },
-                errorState = false
             )
             is CommonResponse.Load -> LoadPreConcert()
             is CommonResponse.Success -> SuccessPreConcert(navToConcert, artistId, uiState)
         }
     }
+}
+
+@Composable
+fun ErrorPreConcert() {
+    TODO("Not yet implemented")
 }
 
 @Composable
@@ -83,13 +118,9 @@ private fun InitialPreConcert(
     artistId: String,
     navToMain: () -> Unit,
     uploadAvatar: (Uri) -> Unit,
-    errorState: Boolean
 ) {
     val scrollState = rememberScrollState()
-    val timeUtil = LocalTimeUtil.current
     val userPref = LocalUserPref.current
-    val openDialog = remember { mutableStateOf(errorState) }
-    openDialog.value = errorState
 
     Column(
         modifier = Modifier
@@ -158,18 +189,7 @@ private fun InitialPreConcert(
         /**
          * Start Concert button
          */
-        StartButton(viewModel, artistId, timeUtil)
-
-        /**
-         * Dialog
-         */
-        if (errorState) {
-            DialogWindow(
-                dialogState = openDialog,
-                dialogType = DialogType.PreConcertError(),
-                onOkClicked = { openDialog.value = false }
-            )
-        }
+        StartButton(viewModel, artistId)
     }
 }
 

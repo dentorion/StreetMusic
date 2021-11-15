@@ -13,5 +13,4 @@ object Dependencies {
     val room = Room
     val auth = Auth
     val timber = Timber
-    val compressor = Compressor
 }

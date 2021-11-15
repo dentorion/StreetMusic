@@ -2,6 +2,7 @@ package com.entin.streetmusic.ui.artist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
@@ -19,6 +20,7 @@ import com.entin.streetmusic.common.model.vmstate.CommonResponse
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.artist.components.ConcertsList
 import com.entin.streetmusic.ui.artist.components.Header
+import com.entin.streetmusic.ui.start.components.BackgroundImage
 import timber.log.Timber
 
 @ExperimentalCoilApi
@@ -28,12 +30,17 @@ fun Artist(
     viewModel: ArtistViewModel = hiltViewModel()
 ) {
     Timber.i("Artist")
+    val uiStateArtist = viewModel.uiStateArtistScreen
 
-    ArtistContent(
-        state = viewModel.stateArtistScreen,
-        getDataOfArtistById = { viewModel.getDataOfArtistById(artistId = artistId) },
-        onLikeClick = { viewModel.clickHeart(artistId = artistId) },
-    )
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        BackgroundImage()
+
+        ArtistContent(
+            state = uiStateArtist,
+            getDataOfArtistById = { viewModel.getDataOfArtistById(artistId = artistId) },
+            onLikeClick = { viewModel.clickHeart(artistId = artistId) },
+        )
+    }
 }
 
 @ExperimentalCoilApi
@@ -67,7 +74,20 @@ private fun ArtistContent(
 
 @Composable
 private fun InitialArtist(getDataOfArtistById: () -> Unit) {
-    getDataOfArtistById()
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        Arrangement.Center,
+        Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(color = StreetMusicTheme.colors.white)
+        Text(
+            text = stringResource(R.string.please_wait_artist),
+            color = StreetMusicTheme.colors.white,
+            style = StreetMusicTheme.typography.errorPermission
+        )
+        getDataOfArtistById()
+    }
 }
 
 @ExperimentalCoilApi
@@ -110,10 +130,15 @@ private fun LoadingArtist() {
         modifier = Modifier
             .fillMaxSize()
             .background(StreetMusicTheme.colors.artistGradientDown),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        Arrangement.Center,
+        Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator(color = StreetMusicTheme.colors.white)
+        Text(
+            text = stringResource(R.string.please_wait_artist),
+            color = StreetMusicTheme.colors.white,
+            style = StreetMusicTheme.typography.errorPermission
+        )
     }
 }
 

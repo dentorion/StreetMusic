@@ -23,7 +23,9 @@ object Versions {
     /**
      * Retrofit + GSON
      */
+    const val retrofit = "2.9.0"
     const val gson = "2.9.0"
+    const val loggingInterceptor = "5.0.0-alpha.2"
 
     /**
      * Compose
@@ -42,6 +44,7 @@ object Versions {
     const val permissions = "0.18.0"
     const val insets = "0.18.0"
     const val systemUi = "0.18.0"
+    const val animation = "0.21.2-beta"
 
     /**
      * Map
@@ -53,7 +56,7 @@ object Versions {
     /**
      * Firebase
      */
-    const val bom = "28.3.1"
+    const val bom = "29.0.0"
     const val firebaseKtx = "23.0.3"
     const val coroutines = "1.5.1"
     const val crashlytics = "18.2.1"
@@ -73,9 +76,4 @@ object Versions {
      * Timber
      */
     const val timber = "5.0.1"
-
-    /**
-     * Image compressor
-     */
-    const val compressor = "3.0.1"
 }

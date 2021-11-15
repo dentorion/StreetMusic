@@ -28,12 +28,14 @@
     <!-- Artist screen -->
     <string name="started">Started</string>
     <string name="at"> at </string>
+    <string name="please_wait_artist">Please wait</string>
 
     <!-- Authorization -->
     <string name="sign_in_with">Sign in with:</string>
     <string name="google_name_button_label" translatable="false">Google</string>
     <string name="please_wait_auth">Please wait</string>
     <string name="sign_in_fail">Google sign in failed</string>
+    <string name="auth_error">Authorization failed</string>
 
     <!-- Pre Concert -->
     <string name="error_pre_concert">Error happened. Please try again later.</string>

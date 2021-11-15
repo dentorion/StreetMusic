@@ -1,31 +1,28 @@
 package com.entin.streetmusic.util.timber
 
 import android.util.Log
-import com.entin.streetmusic.common.constants.ERROR_NAME_HILT
-import com.entin.streetmusic.util.timber.model.ErrorModel
+import com.entin.streetmusic.util.firebase.errors.queries.ErrorsQueries
+import com.entin.streetmusic.util.firebase.errors.model.ErrorFirebaseModel
 import com.entin.streetmusic.util.user.UserSession
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.SetOptions
 import org.jetbrains.annotations.NotNull
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class ReleaseTree @Inject constructor(
-    @Named(ERROR_NAME_HILT) private val fireBaseDbErrors: CollectionReference,
+    private val errorDb: ErrorsQueries,
     private val userPref: UserSession,
 ) : @NotNull Timber.Tree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        val error = ErrorModel(
+        val error = ErrorFirebaseModel(
             priority = priority,
             tag = tag,
             message = message,
             t = t,
-            uId = userPref.getId(),
+            artistId = userPref.getId(),
             city = userPref.getCity(),
             country = userPref.getCountry(),
         )
@@ -34,7 +31,7 @@ class ReleaseTree @Inject constructor(
          */
         if (priority == Log.ERROR || priority == Log.WARN) {
             // Save to Errors
-            fireBaseDbErrors.document().set(error, SetOptions.merge())
+            errorDb.error(error)
             // Save to Crashlytics
             FirebaseCrashlytics.getInstance().log(message)
         }

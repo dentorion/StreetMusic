@@ -86,7 +86,19 @@ fun CityConcerts(
 @Composable
 private fun InitialCityConcerts(action: () -> Unit) {
     Timber.i("CityConcertsContent.Initial")
-    action()
+
+    Column(modifier = Modifier.fillMaxSize(), Arrangement.Center, Alignment.CenterHorizontally) {
+        CircularProgressIndicator(color = StreetMusicTheme.colors.white)
+        DisableSelection {
+            Text(
+                text = stringResource(R.string.please_wait_perm),
+                color = StreetMusicTheme.colors.white,
+                style = StreetMusicTheme.typography.errorPermission
+            )
+
+            action()
+        }
+    }
 }
 
 @Composable

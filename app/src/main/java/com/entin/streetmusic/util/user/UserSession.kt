@@ -82,6 +82,9 @@ class UserSession(context: Context) {
     fun getTimeStop(): Long =
         pref.getLong(USER_TIME_FINISH, 0L)
 
+    fun getAvatarUrl(): String =
+        pref.getString(USER_URL_AVATAR, "").toString()
+
     /**
      * ARTIST "musician" SET parameters
      */
@@ -102,4 +105,7 @@ class UserSession(context: Context) {
 
     fun setTimeStop(value: Long) =
         pref.set(USER_TIME_FINISH, value)
+
+    fun setAvatarUrl(value: String) =
+        pref.set(USER_URL_AVATAR, value)
 }

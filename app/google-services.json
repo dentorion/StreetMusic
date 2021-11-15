@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "210781298459",
+    "project_id": "street-music-a5abd",
+    "storage_bucket": "street-music-a5abd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210781298459:android:71e260183c04f40094fdbe",
+        "android_client_info": {
+          "package_name": "com.entin.streetmusic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210781298459-9ot66mggqh2khfhj1mit9do6tt7cjo9t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entin.streetmusic",
+            "certificate_hash": "a797595c601f202bc73c415bdf291a3174e56481"
+          }
+        },
+        {
+          "client_id": "210781298459-dr3hhks5sj4e6p35mk4spu9kc1k8fff5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGMwNGlztfKUbeFvNQkF0dS3R5Nc9D09g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210781298459-dr3hhks5sj4e6p35mk4spu9kc1k8fff5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

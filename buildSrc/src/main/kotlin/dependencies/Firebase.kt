@@ -42,4 +42,9 @@ object Firebase {
      */
     const val firebaseStorageKtx = "com.google.firebase:firebase-storage-ktx"
 
+    /**
+     * Declare the dependency for the Performance Monitoring library
+     */
+    const val performance = "com.google.firebase:firebase-perf-ktx"
+
 }

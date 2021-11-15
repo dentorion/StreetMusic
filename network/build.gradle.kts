@@ -19,11 +19,15 @@ android {
 
 dependencies {
     // Hilt
-    implementation ("com.google.dagger:hilt-android:2.38.1")
-    kapt("com.google.dagger:hilt-compiler:2.38.1")
+    Dependencies.hilt.apply {
+        implementation(main)
+        kapt(compile)
+    }
 
     // Retrofit
-    api("com.squareup.retrofit2:retrofit:2.9.0")
-    api("com.squareup.retrofit2:converter-gson:2.9.0")
-    api("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    Dependencies.retrofit.apply {
+        api(retrofit)
+        api(gson)
+        api(loggingInterceptor)
+    }
 }
