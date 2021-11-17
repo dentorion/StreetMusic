@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.entin.streetmusic.R
 import com.entin.streetmusic.common.model.domain.ConcertDomain
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.cityconcerts.components.BannerMap
 import com.entin.streetmusic.ui.cityconcerts.components.ConcertsRecyclerView
@@ -31,7 +31,7 @@ fun CityConcerts(
     Timber.i("CityConcerts. ViewModel hash : " + viewModel.hashCode())
 
     val userCity = viewModel.userCity
-    val stateUi = viewModel.stateConcerts
+    val stateUi = viewModel.uiStateCityConcerts
 
     Column(
         modifier = Modifier.background(
@@ -59,10 +59,10 @@ fun CityConcerts(
             contentAlignment = Alignment.BottomCenter
         ) {
             when (stateUi) {
-                is CommonResponse.Error -> ErrorCityConcerts()
-                is CommonResponse.Initial -> InitialCityConcerts(action = { viewModel.getConcertsActualCity() })
-                is CommonResponse.Load -> LoadCityConcerts()
-                is CommonResponse.Success -> SuccessCityConcerts(
+                is StreetMusicResponse.Error -> ErrorCityConcerts()
+                is StreetMusicResponse.Initial -> InitialCityConcerts(action = { viewModel.getConcertsActualCity() })
+                is StreetMusicResponse.Load -> LoadCityConcerts()
+                is StreetMusicResponse.Success -> SuccessCityConcerts(
                     state = stateUi.data,
                     navToArtistPage = navToArtistPage
                 )

@@ -11,7 +11,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.SetOptions
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -21,7 +20,6 @@ import javax.inject.Named
  * Firebase queries related to Artist user
  */
 
-@ViewModelScoped
 class ArtistQueries @Inject constructor(
     @Named(CONCERTS_NAME_HILT) private val fireBaseDbConcerts: CollectionReference,
     @Named(USERS_NAME_HILT) private val fireBaseDbUsers: CollectionReference,

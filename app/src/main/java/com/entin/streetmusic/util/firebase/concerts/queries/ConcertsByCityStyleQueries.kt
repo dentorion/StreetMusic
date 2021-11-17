@@ -7,7 +7,6 @@ import com.entin.streetmusic.util.firebase.constant.*
 import com.entin.streetmusic.util.time.TimeUtil
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -17,7 +16,6 @@ import javax.inject.Named
  * Firebase queries for getting concerts for CityConcerts screen
  */
 
-@ViewModelScoped
 class ConcertsByCityStyleQueries @Inject constructor(
     @Named(CONCERTS_NAME_HILT) private val fireBaseDbConcerts: CollectionReference,
     private val timeUtil: TimeUtil,

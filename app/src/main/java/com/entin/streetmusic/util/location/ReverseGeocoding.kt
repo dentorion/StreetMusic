@@ -7,7 +7,6 @@ import android.util.Log
 import com.entin.streetmusic.BuildConfig
 import com.google.android.libraries.places.api.Places
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -15,8 +14,9 @@ import timber.log.Timber
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@ViewModelScoped
+@Singleton
 class ReverseGeocoding @Inject constructor(@ApplicationContext private val application: Context) {
 
     suspend fun requestCity(location: Location) = flow {

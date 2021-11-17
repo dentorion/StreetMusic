@@ -1,27 +1,25 @@
 package com.entin.streetmusic.util.database.favourite
 
-import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
-@ViewModelScoped
 class ArtistsFavouriteRoom @Inject constructor(
     private val favouritesDAO: FavouritesDAO
 ) {
     /**
      * Check if artist in favourite list by his id
      */
-    fun checkFavouriteById(artistId: String): Boolean =
+    fun isArtistFavourite(artistId: String): Boolean =
         favouritesDAO.checkArtistFavourite(artistId = artistId)
 
     /**
      * Add artist to favourite
      */
-    suspend fun addFavourite(favouriteArtistModel: FavouriteArtistModel) =
+    suspend fun addFavouriteArtist(favouriteArtistModel: FavouriteArtistModel) =
         favouritesDAO.addFavourite(favouriteArtistModel = favouriteArtistModel)
 
     /**
      * Delete artist from favourite
      */
-    suspend fun delFavourite(artistId: String) =
+    suspend fun delFavouriteArtist(artistId: String) =
         favouritesDAO.deleteFavourite(artistId = artistId)
 }

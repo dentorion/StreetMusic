@@ -82,13 +82,13 @@ private fun activityResult(
                     signWithCredential(credential)
 
                 } catch (e: ApiException) {
-                    Timber.i(e.message)
+                    Timber.e(e.message)
                 }
             } else {
-                Timber.i("rememberLauncherForActivityResult. data == null.")
+                Timber.e("rememberLauncherForActivityResult. data == null.")
             }
         } else {
-            Timber.i("rememberLauncherForActivityResult. resultCode. error.")
+            Timber.e("rememberLauncherForActivityResult. resultCode. error.")
         }
     }
 }

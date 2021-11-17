@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.entin.streetmusic.common.model.domain.ConcertDomain
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.ui.permissions.components.AskPermissions
 import com.entin.streetmusic.ui.permissions.components.states.*
 import com.entin.streetmusic.ui.start.components.BackgroundImage
@@ -47,7 +47,7 @@ fun Permissions(
                 HasPermission(
                     navToAuthorization = navToAuthorization,
                     navToCityConcerts = navToCityConcerts,
-                    uiState = viewModel.state,
+                    uiStatePermissions = viewModel.uiStatePermissions,
                     getUserInfo = viewModel::getUserInfo,
                 )
             }
@@ -67,29 +67,29 @@ fun Permissions(
 private fun HasPermission(
     navToAuthorization: () -> Unit,
     navToCityConcerts: () -> Unit,
-    uiState: CommonResponse<ConcertDomain>,
+    uiStatePermissions: StreetMusicResponse<ConcertDomain>,
     getUserInfo: () -> Unit,
 ) {
     /**
      * Check UI State
      */
-    when (uiState) {
-        is CommonResponse.Error -> {
+    when (uiStatePermissions) {
+        is StreetMusicResponse.Error -> {
             Timber.i("PermissionsContent.Error")
             ErrorPermissions()
         }
-        is CommonResponse.Load -> {
+        is StreetMusicResponse.Load -> {
             Timber.i("PermissionsContent.Load")
             LoadPermissions()
         }
-        is CommonResponse.Success -> {
+        is StreetMusicResponse.Success -> {
             Timber.i("PermissionsContent.Success")
             SuccessPermissions(
                 navToAuthorization = navToAuthorization,
                 navToCityConcerts = navToCityConcerts
             )
         }
-        is CommonResponse.Initial -> {
+        is StreetMusicResponse.Initial -> {
             Timber.i("PermissionsContent.Initial")
             InitialPermissions(getUserInfo)
         }

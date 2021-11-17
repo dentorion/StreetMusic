@@ -3,6 +3,7 @@ package com.entin.streetmusic.ui.preconcert
 import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
@@ -15,12 +16,11 @@ import coil.annotation.ExperimentalCoilApi
 import com.entin.streetmusic.R
 import com.entin.streetmusic.common.dialog.DialogWindow
 import com.entin.streetmusic.common.model.dialog.DialogType
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.artist.components.StatusOnline
 import com.entin.streetmusic.ui.preconcert.components.*
 import com.entin.streetmusic.ui.start.components.BackgroundImage
-import com.entin.streetmusic.util.user.LocalUserPref
 import com.google.accompanist.insets.imePadding
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -67,7 +67,7 @@ fun ShowAlertPreConcert(alertWindow: MutableState<Boolean>) {
 @ExperimentalCoilApi
 @Composable
 private fun PreConcertContent(
-    uiState: CommonResponse<String>,
+    uiState: StreetMusicResponse<String>,
     viewModel: PreConcertViewModel,
     artistId: String,
     navToConcert: (String, String) -> Unit,
@@ -84,29 +84,35 @@ private fun PreConcertContent(
         Timber.i("PreConcert")
 
         when (uiState) {
-            is CommonResponse.Error -> ErrorPreConcert()
-            is CommonResponse.Initial -> InitialPreConcert(
+            is StreetMusicResponse.Error -> ErrorPreConcert(uiState.message)
+            is StreetMusicResponse.Initial -> InitialPreConcert(
                 viewModel = viewModel,
                 artistId = artistId,
                 navToMain = navToMain,
-                uploadAvatar = { viewModel.avatarUploadAndSaveDb(it, artistId) },
+                uploadAvatar = { viewModel.avatarUpload(it, artistId) },
             )
-            is CommonResponse.Load -> LoadPreConcert()
-            is CommonResponse.Success -> SuccessPreConcert(navToConcert, artistId, uiState)
+            is StreetMusicResponse.Load -> LoadPreConcert()
+            is StreetMusicResponse.Success -> SuccessPreConcert(navToConcert, artistId, uiState)
         }
     }
 }
 
 @Composable
-fun ErrorPreConcert() {
-    TODO("Not yet implemented")
+fun ErrorPreConcert(message: String) {
+    DisableSelection {
+        Text(
+            text = message,
+            color = StreetMusicTheme.colors.white,
+            style = StreetMusicTheme.typography.errorPermission,
+        )
+    }
 }
 
 @Composable
 private fun SuccessPreConcert(
     navToConcert: (String, String) -> Unit,
     artistId: String,
-    uiState: CommonResponse.Success<String>
+    uiState: StreetMusicResponse.Success<String>
 ) {
     navToConcert(artistId, uiState.data)
 }
@@ -120,7 +126,6 @@ private fun InitialPreConcert(
     uploadAvatar: (Uri) -> Unit,
 ) {
     val scrollState = rememberScrollState()
-    val userPref = LocalUserPref.current
 
     Column(
         modifier = Modifier
@@ -166,25 +171,22 @@ private fun InitialPreConcert(
          */
         BandNameCityCountry(
             bandName = viewModel.bandName,
-            city = userPref.getCity(),
-            country = userPref.getCountry()
+            city = viewModel.city,
+            country = viewModel.country,
         )
 
         /**
          * Style Music buttons selector
          */
         StyleMusicButtons(
-            onClick = {
-                userPref.setStyleMusic(it.styleName)
-                viewModel.musicType = it
-            },
+            onClick = { viewModel.saveCurrentMusicType(it) },
             actualChoice = viewModel.musicType,
         )
 
         /**
          * Text fields: bandName, address, description
          */
-        TextFields(viewModel, userPref)
+        TextFields(viewModel)
 
         /**
          * Start Concert button

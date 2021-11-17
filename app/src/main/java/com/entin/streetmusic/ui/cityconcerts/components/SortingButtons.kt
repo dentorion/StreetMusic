@@ -9,7 +9,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.entin.streetmusic.R
 import com.entin.streetmusic.common.model.domain.ConcertDomain
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.cityconcerts.CityConcertsViewModel
 import com.entin.streetmusic.ui.preconcert.components.StyleMusicButtons
@@ -17,7 +17,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 
 @Composable
 fun SortingButtons(
-    stateUi: CommonResponse<List<ConcertDomain>>,
+    stateUi: StreetMusicResponse<List<ConcertDomain>>,
     viewModel: CityConcertsViewModel,
     userCity: String
 ) {
@@ -50,7 +50,7 @@ fun SortingButtons(
                 .padding(vertical = StreetMusicTheme.dimensions.allVerticalPadding)
                 .navigationBarsPadding(),
         ) {
-            val isButtonEnabled = stateUi is CommonResponse.Success
+            val isButtonEnabled = stateUi is StreetMusicResponse.Success
             /**
              * Styles buttons
              */

@@ -4,7 +4,6 @@ import com.entin.network.worldtime.api.TimeUtcApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class ServerUnixTime @Inject constructor(
     private val apiService: TimeUtcApiService
 ) {

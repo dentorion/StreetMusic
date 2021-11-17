@@ -22,7 +22,7 @@ sealed class MusicType(val styleName: String, val icon: Int) {
     object None : MusicType("", 0)
 }
 
-fun convertToMusicStyle(styleNameString: String): MusicType {
+fun convertToMusicType(styleNameString: String): MusicType {
     return when (styleNameString) {
         ROCK -> MusicType.Rock()
         CLASSIC -> MusicType.Classic()

@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.entin.streetmusic.R
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.artist.components.StatusOnline
 import com.entin.streetmusic.ui.concert.components.AutoStop
@@ -35,13 +35,13 @@ fun Concert(
         BackgroundImage()
 
         when (val uiState = viewModel.uiStateConcert) {
-            is CommonResponse.Error -> ErrorConcert(uiState.message)
-            is CommonResponse.Initial -> InitialConcert(
+            is StreetMusicResponse.Error -> ErrorConcert(uiState.message)
+            is StreetMusicResponse.Initial -> InitialConcert(
                 avatarUrl = viewModel.avatarUrl,
                 stopConcert = { viewModel.stopConcert(documentId) },
             )
-            is CommonResponse.Load -> LoadConcert()
-            is CommonResponse.Success -> {
+            is StreetMusicResponse.Load -> LoadConcert()
+            is StreetMusicResponse.Success -> {
                 SuccessConcert(navToPreConcert, userId)
             }
         }

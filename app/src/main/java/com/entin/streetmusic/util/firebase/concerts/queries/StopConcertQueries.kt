@@ -5,7 +5,6 @@ import com.entin.streetmusic.util.firebase.constant.FIELD_STOP_MANUAL
 import com.entin.streetmusic.util.firebase.constant.FIELD_STOP_TIME
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
-import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -13,7 +12,6 @@ import javax.inject.Named
  * Firebase query for ending concert
  */
 
-@ViewModelScoped
 class StopConcertQueries @Inject constructor(
     @Named(CONCERTS_NAME_HILT) private val fireBaseDb: CollectionReference
 ) {

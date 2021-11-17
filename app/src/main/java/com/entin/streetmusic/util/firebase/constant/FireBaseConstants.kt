@@ -17,12 +17,6 @@ const val AVATARS_NAME_HILT = "avatars"
 const val ERROR_NAME_HILT = "errors"
 
 /**
- * 1 Hour in mls
- */
-
-const val HOUR_ONE_MLS: Long = 3600000L
-
-/**
  * Artist avatar url default
  */
 const val DEFAULT_URL_AVATAR = "https://firebasestorage.googleapis.com/v0/b/street-music-a5abd.appspot.com/o/avatar-default.jpg?alt=media&token=e27a9209-add3-4761-b571-067216c6fc89"

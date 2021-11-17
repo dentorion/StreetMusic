@@ -2,13 +2,15 @@ package com.entin.streetmusic.util.user
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.entin.streetmusic.R
 import com.entin.streetmusic.util.user.constant.*
 import com.entin.streetmusic.util.user.extensions.set
 
-class UserSession(context: Context) {
+class UserSession(private val context: Context) {
 
     private val pref: SharedPreferences =
         context.getSharedPreferences(USER_SHARED_PREFERENCES_TAG, Context.MODE_PRIVATE)
+
 
     /**
      * User "listener" GET parameters
@@ -67,14 +69,29 @@ class UserSession(context: Context) {
     fun getId(): String =
         pref.getString(USER_ID, "").toString()
 
-    fun getBandName(): String =
-        pref.getString(USER_NAME_BAND, "").toString()
+    fun getBandName(): String {
+        return if (pref.getString(USER_NAME_BAND, "").toString().isEmpty()) {
+            context.applicationContext.resources.getString(R.string.your_band_name)
+        } else {
+            pref.getString(USER_NAME_BAND, "").toString()
+        }
+    }
 
-    fun getAddress(): String =
-        pref.getString(USER_ADDRESS, "").toString()
+    fun getAddress(): String {
+        return if (pref.getString(USER_ADDRESS, "").toString().isEmpty()) {
+            context.applicationContext.resources.getString(R.string.fill_address)
+        } else {
+            pref.getString(USER_ADDRESS, "").toString()
+        }
+    }
 
-    fun getDescription(): String =
-        pref.getString(USER_DESCRIPTION, "").toString()
+    fun getDescription(): String {
+        return if (pref.getString(USER_DESCRIPTION, "").toString().isEmpty()) {
+            context.applicationContext.resources.getString(R.string.short_description)
+        } else {
+            pref.getString(USER_DESCRIPTION, "").toString()
+        }
+    }
 
     fun getStyleMusic(): String =
         pref.getString(USER_STYLE, "").toString()

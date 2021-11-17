@@ -6,11 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.entin.streetmusic.common.model.domain.ConcertDomain
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
-import com.entin.streetmusic.util.database.favourite.ArtistsFavouriteRoom
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.util.database.favourite.FavouriteArtistModel
-import com.entin.streetmusic.util.firebase.artist.queries.ArtistQueries
-import com.entin.streetmusic.util.firebase.avatar.queries.AvatarQueries
 import com.entin.streetmusic.util.firebase.constant.DEFAULT_URL_AVATAR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,12 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ArtistViewModel @Inject constructor(
-    private val artistQueries: ArtistQueries,
-    private val artistFavouriteRoom: ArtistsFavouriteRoom,
-    private val storageAvatar: AvatarQueries,
+    private val repository: ArtistRepository,
 ) : ViewModel() {
 
-    var uiStateArtistScreen: CommonResponse<ArtistResponse> by mutableStateOf(CommonResponse.Initial())
+    var uiStateArtist: StreetMusicResponse<ArtistResponse> by mutableStateOf(StreetMusicResponse.Initial())
         private set
 
     private var concerts: Pair<List<ConcertDomain>, List<ConcertDomain>> = Pair(listOf(), listOf())
@@ -38,7 +33,7 @@ class ArtistViewModel @Inject constructor(
      * Get all concerts by artist
      */
     fun getDataOfArtistById(artistId: String) = viewModelScope.launch {
-        uiStateArtistScreen = CommonResponse.Load()
+        uiStateArtist = StreetMusicResponse.Load()
 
         withContext(Dispatchers.Default) {
             // Get all concerts: on-line and off-line
@@ -50,7 +45,7 @@ class ArtistViewModel @Inject constructor(
             // Is favourite artist
             getFavouriteState(artistId)
 
-            uiStateArtistScreen = CommonResponse.Success(
+            uiStateArtist = StreetMusicResponse.Success(
                 ArtistResponse(
                     avatar = avatarUrl,
                     isFavouriteArtist = isFavouriteArtist,
@@ -65,10 +60,10 @@ class ArtistViewModel @Inject constructor(
      */
     fun clickHeart(artistId: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            if (artistFavouriteRoom.checkFavouriteById(artistId)) {
-                artistFavouriteRoom.delFavourite(artistId = artistId)
+            if (repository.isArtistFavourite(artistId)) {
+                repository.delFavouriteArtist(artistId = artistId)
             } else {
-                artistFavouriteRoom.addFavourite(
+                repository.addFavouriteArtist(
                     FavouriteArtistModel(idArtist = artistId)
                 )
             }
@@ -76,15 +71,15 @@ class ArtistViewModel @Inject constructor(
     }
 
     private fun getFavouriteState(artistId: String) {
-        isFavouriteArtist = artistFavouriteRoom.checkFavouriteById(artistId)
+        isFavouriteArtist = repository.isArtistFavourite(artistId)
     }
 
     private suspend fun getConcerts(artistId: String) {
-        concerts = artistQueries.getAllConcertsByArtist(artistId = artistId)
+        concerts = repository.getAllConcertsByArtist(artistId = artistId)
     }
 
     private suspend fun getAvatarUrl(artistId: String) {
-        storageAvatar.getAvatarUrl(artistId = artistId) { url ->
+        repository.getAvatarUrl(artistId = artistId) { url ->
             avatarUrl = url
         }
     }

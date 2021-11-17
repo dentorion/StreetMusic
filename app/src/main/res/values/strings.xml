@@ -2,9 +2,6 @@
     <!-- Common -->
     <string name="app_name" translatable="false">Street Music</string>
 
-    <string name="facebook_app_id" translatable="false">564028241414184</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb564028241414184</string>
-
     <!-- Start screen -->
     <string name="im_artist_button_label">I\'M PLAYING NOW</string>
     <string name="find_music_button_label">FIND GOOD STREET MUSIC</string>
@@ -74,5 +71,10 @@
     <!-- MapObserve -->
     <string name="back_to_list">Back to list</string>
     <string name="now_playing_map">Now playing:</string>
+
+    <!-- User Session -->
+    <string name="your_band_name">Your Band name</string>
+    <string name="fill_address">Fill address</string>
+    <string name="short_description">Short description</string>
 
 </resources>

@@ -9,7 +9,6 @@ import com.entin.streetmusic.util.firebase.constant.FIELD_AVATAR_URL
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
-import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Named
@@ -18,7 +17,6 @@ import javax.inject.Named
  * Firebase Storage Queries
  * on checking avatar existing in storage in a case of absent file the response is exception
  */
-@ViewModelScoped
 class AvatarQueries @Inject constructor(
     @Named(AVATARS_NAME_HILT) private val fireBaseDbAvatars: CollectionReference,
 ) {

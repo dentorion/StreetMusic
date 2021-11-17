@@ -7,21 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.entin.streetmusic.common.model.domain.ConcertDomain
 import com.entin.streetmusic.common.model.music.MusicType
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
-import com.entin.streetmusic.util.firebase.concerts.queries.ConcertsByCityStyleQueries
-import com.entin.streetmusic.util.user.UserSession
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CityConcertsViewModel @Inject constructor(
-    private val concertsByCityStyleQueries: ConcertsByCityStyleQueries,
-    userStateSession: UserSession,
+    private val repository: CityConcertsRepository,
 ) : ViewModel() {
 
     // State
-    var stateConcerts: CommonResponse<List<ConcertDomain>> by mutableStateOf(CommonResponse.Initial())
+    var uiStateCityConcerts: StreetMusicResponse<List<ConcertDomain>> by mutableStateOf(StreetMusicResponse.Initial())
         private set
 
     // Style button on / off state
@@ -46,7 +43,7 @@ class CityConcertsViewModel @Inject constructor(
         private set
 
     // City of the user
-    val userCity = userStateSession.getCity()
+    val userCity = repository.getUserSession().getCity()
 
     /**
      * Initial
@@ -116,27 +113,26 @@ class CityConcertsViewModel @Inject constructor(
      * Get actual "concerts" in city, style = all
      */
     private fun getConcertsActualCityContent() = viewModelScope.launch {
-        stateConcerts = CommonResponse.Load()
+        uiStateCityConcerts = StreetMusicResponse.Load()
 
-        val concerts = concertsByCityStyleQueries.getConcertsActualCity(userCity)
+        // Get actual concerts of all style music with sorting by create time
+        val concerts = repository.getConcertsActualCity(userCity).sortedByDescending { it.create }
 
+        // Save concerts for the map screen
         onlineConcertsForMap = concerts
-        concerts.sortedByDescending { it.create }
 
-        stateConcerts = CommonResponse.Success(concerts)
+        uiStateCityConcerts = StreetMusicResponse.Success(concerts)
     }
 
     /**
      * Get expired "concerts" in city, styles = all
      */
     private fun getConcertsExpiredCity() = viewModelScope.launch {
-        stateConcerts = CommonResponse.Load()
+        uiStateCityConcerts = StreetMusicResponse.Load()
 
-        val concertsExpiredByTime =
-            concertsByCityStyleQueries.getConcertsExpiredCityTime(userCity)
+        val concertsExpiredByTime = repository.getConcertsExpiredCityTime(userCity)
 
-        val concertsExpiredByCancellation =
-            concertsByCityStyleQueries.getConcertsExpiredCityCancellation(userCity)
+        val concertsExpiredByCancellation = repository.getConcertsExpiredCityCancellation(userCity)
 
         val concerts = ArrayList<ConcertDomain>().apply {
             addAll(concertsExpiredByTime)
@@ -144,32 +140,33 @@ class CityConcertsViewModel @Inject constructor(
             sortByDescending { it.create }
         }
 
-        stateConcerts = CommonResponse.Success(concerts)
+        uiStateCityConcerts = StreetMusicResponse.Success(concerts)
     }
 
     /**
      * Get actual "concerts" in city by style of music
      */
     private fun getConcertsActualCityStyle(type: MusicType) = viewModelScope.launch {
-        stateConcerts = CommonResponse.Load()
+        uiStateCityConcerts = StreetMusicResponse.Load()
 
-        val concerts = concertsByCityStyleQueries.getConcertsActualCityStyle(userCity, type)
-        concerts.sortedByDescending { it.create }
+        val concerts = repository
+            .getConcertsActualCityStyle(userCity, type)
+            .sortedByDescending { it.create }
 
-        stateConcerts = CommonResponse.Success(concerts)
+        uiStateCityConcerts = StreetMusicResponse.Success(concerts)
     }
 
     /**
      * Get expired "concerts" in city by style of music
      */
     private fun getConcertsExpiredCityStyle(type: MusicType) = viewModelScope.launch {
-        stateConcerts = CommonResponse.Load()
+        uiStateCityConcerts = StreetMusicResponse.Load()
 
         val concertsExpiredByTime =
-            concertsByCityStyleQueries.getConcertsExpiredCityStyle(userCity, type)
+            repository.getConcertsExpiredCityStyle(userCity, type)
 
         val concertsExpiredByCancellation =
-            concertsByCityStyleQueries.getConcertsExpiredCityStyleCancellation(userCity, type)
+            repository.getConcertsExpiredCityStyleCancellation(userCity, type)
 
         val concerts = ArrayList<ConcertDomain>().apply {
             addAll(concertsExpiredByTime)
@@ -177,6 +174,6 @@ class CityConcertsViewModel @Inject constructor(
             sortByDescending { it.create }
         }
 
-        stateConcerts = CommonResponse.Success(concerts)
+        uiStateCityConcerts = StreetMusicResponse.Success(concerts)
     }
 }

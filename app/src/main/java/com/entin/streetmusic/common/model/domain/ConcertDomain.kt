@@ -1,7 +1,7 @@
 package com.entin.streetmusic.common.model.domain
 
 import com.entin.streetmusic.common.model.music.MusicType
-import com.entin.streetmusic.common.model.music.convertToMusicStyle
+import com.entin.streetmusic.common.model.music.convertToMusicType
 import com.entin.streetmusic.util.firebase.constant.*
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import java.util.*
@@ -54,7 +54,7 @@ fun QueryDocumentSnapshot.convertToConcertDomain(): ConcertDomain =
         country = this.getString(FIELD_COUNTRY) ?: "",
         latitude = this.getString(FIELD_LATITUDE) ?: "",
         longitude = this.getString(FIELD_LONGITUDE) ?: "",
-        styleMusic = convertToMusicStyle(this.getString(FIELD_STYLE) ?: "none"),
+        styleMusic = convertToMusicType(this.getString(FIELD_STYLE) ?: "none"),
         address = this.getString(FIELD_ADDRESS) ?: "",
         description = this.getString(FIELD_DESCRIPTION) ?: "",
         create = this.getDate(FIELD_CREATE) ?: Date(),

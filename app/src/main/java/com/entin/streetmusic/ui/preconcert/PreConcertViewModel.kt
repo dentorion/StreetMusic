@@ -7,13 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.entin.streetmusic.common.model.music.MusicType
-import com.entin.streetmusic.common.model.music.convertToMusicStyle
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
+import com.entin.streetmusic.common.model.music.convertToMusicType
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.util.firebase.concerts.model.ConcertFirebaseModel
-import com.entin.streetmusic.util.firebase.avatar.queries.AvatarQueries
-import com.entin.streetmusic.util.firebase.concerts.queries.StartConcertQueries
-import com.entin.streetmusic.util.time.TimeUtil
-import com.entin.streetmusic.util.user.UserSession
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -23,16 +19,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PreConcertViewModel @Inject constructor(
-    private val startConcertQueries: StartConcertQueries,
-    private val timeUtil: TimeUtil,
-    private val userSession: UserSession,
-    private val storageAvatar: AvatarQueries,
+    private val repository: PreConcertRepository,
 ) : ViewModel() {
 
     /**
      * Ui State Screen
      */
-    var uiStatePreConcert: CommonResponse<String> by mutableStateOf(CommonResponse.Initial())
+    var uiStatePreConcert: StreetMusicResponse<String> by mutableStateOf(StreetMusicResponse.Initial())
         private set
 
     /**
@@ -45,54 +38,63 @@ class PreConcertViewModel @Inject constructor(
      * Fields of PreConcert screen
      */
     // Avatar
-    var avatarUrl: String = userSession.getAvatarUrl()
+    var avatarUrl = repository.getUserSession().getAvatarUrl()
         private set
 
     // Style
-    var musicType: MusicType by mutableStateOf(MusicType.None)
+    var musicType by mutableStateOf(convertToMusicType(repository.getUserSession().getStyleMusic()))
+        private set
 
     // Name of Band
-    var bandName: String by mutableStateOf("Your Band name")
+    var bandName by mutableStateOf(repository.getUserSession().getBandName())
+        private set
 
     // Address
-    var address: String by mutableStateOf("Fill address")
+    var address by mutableStateOf(repository.getUserSession().getAddress())
+        private set
 
     // Description
-    var description: String by mutableStateOf("Short description")
+    var description by mutableStateOf(repository.getUserSession().getDescription())
+        private set
 
-    /**
-     * Init ViewModel fields value
-     */
-    init {
-        if (userSession.getStyleMusic().isNotEmpty()) {
-            musicType = convertToMusicStyle(userSession.getStyleMusic())
-        }
+    // City
+    val city = repository.getUserSession().getCity()
 
-        if (userSession.getBandName().isNotEmpty()) {
-            bandName = userSession.getBandName()
-        }
-
-        if (userSession.getAddress().isNotEmpty()) {
-            address = userSession.getAddress()
-        }
-
-        if (userSession.getDescription().isNotEmpty()) {
-            description = userSession.getDescription()
-        }
-    }
+    // Country
+    val country = repository.getUserSession().getCountry()
 
     /**
      * Upload new avatar from URI
      */
-    fun avatarUploadAndSaveDb(image: Uri?, artistId: String) = viewModelScope.launch {
-        uiStatePreConcert = CommonResponse.Load()
+    fun avatarUpload(image: Uri?, artistId: String) = viewModelScope.launch {
+        uiStatePreConcert = StreetMusicResponse.Load()
 
         // Save image to Firebase Storage
         if (image != null) {
             uploadAvatar(image, artistId)
         } else {
-            uiStatePreConcert = CommonResponse.Error("Image uri is null!")
+            uiStatePreConcert = StreetMusicResponse.Error("Image uri is null!")
         }
+    }
+
+    fun saveCurrentMusicType(it: MusicType) {
+        repository.getUserSession().setStyleMusic(it.styleName)
+        musicType = it
+    }
+
+    fun saveCurrentBandName(it: String) {
+        repository.getUserSession().setBandName(it)
+        bandName = it
+    }
+
+    fun saveCurrentAddress(it: String) {
+        repository.getUserSession().setAddress(it)
+        address = it
+    }
+
+    fun saveCurrentDescription(it: String) {
+        repository.getUserSession().setDescription(it)
+        description = it
     }
 
     /**
@@ -105,7 +107,7 @@ class PreConcertViewModel @Inject constructor(
         city: String,
         artistId: String,
     ) = viewModelScope.launch {
-        uiStatePreConcert = CommonResponse.Load()
+        uiStatePreConcert = StreetMusicResponse.Load()
 
         if (checkFieldsForEmpty()) {
             val concertToCreate = ConcertFirebaseModel(
@@ -118,39 +120,39 @@ class PreConcertViewModel @Inject constructor(
                 styleMusic = musicType.styleName,
                 address = address,
                 description = description,
-                UTCDifference = timeUtil.getTimeDifferenceMillisecondsValue()
+                UTCDifference = repository.getTimeUtils().getTimeDifferenceMillisecondsValue()
             )
 
             try {
-                startConcertQueries.createConcert(concertToCreate) { documentId: String ->
+                repository.startConcert(concertToCreate) { documentId: String ->
                     uiStatePreConcert = if (documentId.isEmpty()) {
-                        CommonResponse.Error("Failed start concert")
+                        StreetMusicResponse.Error("Failed start concert")
                     } else {
-                        CommonResponse.Success(documentId)
+                        StreetMusicResponse.Success(documentId)
                     }
                 }
             } catch (e: Exception) {
-                Timber.i("${e.message}")
+                Timber.e("${e.message}")
+                uiStatePreConcert = StreetMusicResponse.Error(e.message.toString())
             }
         } else {
-            uiStatePreConcert = CommonResponse.Initial()
+            uiStatePreConcert = StreetMusicResponse.Initial()
             _alertState.emit(true)
         }
     }
 
     /**
-     * Upload Avatar
+     * Upload Avatar and save to UserSession
      */
-    private fun uploadAvatar(image: Uri, artistId: String) {
-        storageAvatar.uploadAvatar(image = image, artistId = artistId) { imageUrl ->
+    private fun uploadAvatar(image: Uri, artistId: String) =
+        repository.uploadAvatar(image = image, artistId = artistId) { imageUrl ->
             imageUrl.isNotEmpty().apply {
                 avatarUrl = imageUrl
                 // Save to UserSession
                 saveAvatarUrlToUserSession(avatarUrl)
             }
-            uiStatePreConcert = CommonResponse.Initial()
+            uiStatePreConcert = StreetMusicResponse.Initial()
         }
-    }
 
     /**
      * Check text fields and style music are not empty
@@ -162,7 +164,7 @@ class PreConcertViewModel @Inject constructor(
     /**
      * Saving url String into DB
      */
-    private fun saveAvatarUrlToUserSession(imageUrl: String) {
-        userSession.setAvatarUrl(imageUrl)
-    }
+    private fun saveAvatarUrlToUserSession(imageUrl: String) =
+        repository.getUserSession().setAvatarUrl(imageUrl)
+
 }

@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
 import com.entin.streetmusic.R
 import com.entin.streetmusic.common.model.domain.ConcertDomain
-import com.entin.streetmusic.common.model.vmstate.CommonResponse
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.artist.components.ConcertsList
 import com.entin.streetmusic.ui.artist.components.Header
@@ -30,7 +30,7 @@ fun Artist(
     viewModel: ArtistViewModel = hiltViewModel()
 ) {
     Timber.i("Artist")
-    val uiStateArtist = viewModel.uiStateArtistScreen
+    val uiStateArtist = viewModel.uiStateArtist
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         BackgroundImage()
@@ -46,26 +46,26 @@ fun Artist(
 @ExperimentalCoilApi
 @Composable
 private fun ArtistContent(
-    state: CommonResponse<ArtistResponse>,
+    state: StreetMusicResponse<ArtistResponse>,
     getDataOfArtistById: () -> Unit,
     onLikeClick: () -> Unit,
 ) {
     Timber.i("ArtistContent")
 
     when (state) {
-        is CommonResponse.Success -> {
+        is StreetMusicResponse.Success -> {
             Timber.i("ArtistContent.Success")
             SuccessArtist(state, onLikeClick)
         }
-        is CommonResponse.Error -> {
+        is StreetMusicResponse.Error -> {
             Timber.i("ArtistContent.Error")
             ErrorArtist()
         }
-        is CommonResponse.Initial -> {
+        is StreetMusicResponse.Initial -> {
             Timber.i("ArtistContent.Initial")
             InitialArtist(getDataOfArtistById)
         }
-        is CommonResponse.Load -> {
+        is StreetMusicResponse.Load -> {
             Timber.i("ArtistContent.Load")
             LoadingArtist()
         }
@@ -93,7 +93,7 @@ private fun InitialArtist(getDataOfArtistById: () -> Unit) {
 @ExperimentalCoilApi
 @Composable
 private fun SuccessArtist(
-    state: CommonResponse.Success<ArtistResponse>,
+    state: StreetMusicResponse.Success<ArtistResponse>,
     onLikeClick: () -> Unit
 ) {
     val artistActiveConcertList = state.data.lists.first

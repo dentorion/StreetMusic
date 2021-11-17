@@ -13,11 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.entin.streetmusic.R
+import com.entin.streetmusic.common.model.response.StreetMusicResponse
 import com.entin.streetmusic.common.theme.StreetMusicTheme
 import com.entin.streetmusic.ui.authorizate.components.AuthorizationContent
-import com.entin.streetmusic.ui.authorizate.uistate.AuthorizeResponse
 import com.entin.streetmusic.ui.start.components.BackgroundImage
-import com.entin.streetmusic.util.user.LocalUserPref
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -34,7 +33,7 @@ fun Authorize(
         BackgroundImage()
 
         Timber.i("Authorize")
-        val uiAuthorizationState = viewModel.uiAuthorizeState
+        val uiAuthorizationState = viewModel.uiStateAuthorize
 
         AuthorizeContent(
             state = uiAuthorizationState,
@@ -47,82 +46,76 @@ fun Authorize(
 
 @Composable
 private fun AuthorizeContent(
-    state: AuthorizeResponse,
+    state: StreetMusicResponse<InsideResponse>,
     viewModel: AuthorizeViewModel,
     navToPreConcert: (String) -> Unit,
     navToConcert: (artistId: String, documentId: String) -> Unit,
-    ) {
+) {
     when (state) {
-        is AuthorizeResponse.Error -> {
+        is StreetMusicResponse.Error -> {
             Timber.i("Authorize.E")
-            ErrorAuth(state.value)
+            ErrorAuth(state.message)
         }
 
-        is AuthorizeResponse.Initial -> {
+        is StreetMusicResponse.Initial -> {
             Timber.i("Authorize.I")
             InitialAuth(
                 currentUser = Firebase.auth.currentUser,
-                signWithCredential = { viewModel.linkAnonymousToAccount(it) },
+                signIn = { viewModel.linkAnonymousToAccount(it) },
                 checkOnLineConcertsByUser = { viewModel.checkOnlineConcertByUser(it) },
             )
         }
 
-        is AuthorizeResponse.Load -> {
+        is StreetMusicResponse.Load -> {
             Timber.i("Authorize.L")
             LoadAuth()
         }
 
-        is AuthorizeResponse.Success -> {
+        is StreetMusicResponse.Success -> {
             Timber.i("Authorize.S")
-            SuccessAuth(state, viewModel)
+            SuccessAuth(
+                uiState = state.data,
+                checkOnlineConcertByUser = { viewModel.checkOnlineConcertByUser(state.data.artistId) },
+                navToPreConcert = navToPreConcert,
+                navToConcert = navToConcert,
+            )
         }
-
-        is AuthorizeResponse.Navigate -> {
-            Timber.i("Authorize.N")
-            NavigateAuth(state, navToPreConcert, navToConcert)
-        }
-    }
-}
-
-@Composable
-private fun NavigateAuth(
-    state: AuthorizeResponse.Navigate,
-    navToPreConcert: (String) -> Unit,
-    navToConcert: (artistId: String, documentId: String) -> Unit,
-) {
-    if (state.documentId.isNullOrEmpty()) {
-        navToPreConcert(state.artistId)
-    } else {
-        navToConcert(state.artistId, state.documentId)
     }
 }
 
 @Composable
 private fun SuccessAuth(
-    state: AuthorizeResponse.Success,
-    viewModel: AuthorizeViewModel
+    uiState: InsideResponse,
+    checkOnlineConcertByUser: () -> Unit,
+    navToPreConcert: (String) -> Unit,
+    navToConcert: (artistId: String, documentId: String) -> Unit,
 ) {
-    val userPref = LocalUserPref.current
-    state.user?.let { user ->
-        // Save user Id to userPref
-        userPref.setId(user.uid)
+    if (uiState.navigateConcert.not() && uiState.navigatePreConcert.not()) {
         // Check if user has on-line concert -> go to PreConcert / Concert
-        viewModel.checkOnlineConcertByUser(artistId = user.uid)
+        checkOnlineConcertByUser()
+    } else {
+        if (uiState.navigateConcert) {
+            uiState.documentId?.let {
+                navToConcert(uiState.artistId, it)
+            }
+        }
+        if (uiState.navigatePreConcert) {
+            navToPreConcert(uiState.artistId)
+        }
     }
 }
 
 @Composable
 private fun InitialAuth(
-    signWithCredential: (AuthCredential) -> Unit,
+    signIn: (AuthCredential) -> Unit,
     checkOnLineConcertsByUser: (String) -> Unit,
     currentUser: FirebaseUser?
 ) {
     /**
      * If user == null or anon -> check can this user be upgraded to normal auth user
-     *                           canUpgradeAnonymous()
-     *                           If yes -> split anon account with auth account
-     *                           If no  -> auth in normal way
-     *                           AuthorizationContent()
+     *                           linkAnonymousToAccount()
+     *                           If yes -> split anon account to auth account
+     *                           If no  -> auth in normal way with AuthorizationContent()
      * If user != null or anon -> check artist for on-line concert
      *                           If yes -> navigate to Concert
      *                           If no  -> navigate to PreConcert
@@ -130,7 +123,7 @@ private fun InitialAuth(
 
     if (currentUser == null || currentUser.isAnonymous) {
         Timber.i("currentUser == null || currentUser.isAnonymous")
-        AuthorizationContent(signWithCredential = { signWithCredential(it) })
+        AuthorizationContent(signWithCredential = { signIn(it) })
     } else {
         Timber.i("currentUser != null || !currentUser.isAnonymous")
         checkOnLineConcertsByUser(currentUser.uid)

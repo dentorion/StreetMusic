@@ -16,36 +16,31 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import com.entin.streetmusic.R
-import com.entin.streetmusic.ui.preconcert.PreConcertViewModel
 import com.entin.streetmusic.common.theme.StreetMusicTheme
+import com.entin.streetmusic.ui.preconcert.PreConcertViewModel
 import com.entin.streetmusic.ui.preconcert.constant.*
-import com.entin.streetmusic.util.user.UserSession
 
 @Composable
 fun TextFields(
     viewModel: PreConcertViewModel,
-    userPref: UserSession
 ) {
     BandNameTextField(
         caption = stringResource(id = R.string.label_name),
         value = viewModel.bandName,
         onChange = {
-            userPref.setBandName(it)
-            viewModel.bandName = it
+            viewModel.saveCurrentBandName(it)
         })
     ConcertAddressTextField(
         caption = stringResource(id = R.string.label_address),
         value = viewModel.address,
         onChange = {
-            userPref.setAddress(it)
-            viewModel.address = it
+            viewModel.saveCurrentAddress(it)
         })
     DescriptionTextField(
         caption = stringResource(id = R.string.label_description),
         value = viewModel.description,
         onChange = {
-            userPref.setDescription(it)
-            viewModel.description = it
+            viewModel.saveCurrentDescription(it)
         })
 }
 

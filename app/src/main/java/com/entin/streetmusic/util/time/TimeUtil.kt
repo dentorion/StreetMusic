@@ -1,17 +1,12 @@
 package com.entin.streetmusic.util.time
 
 import android.content.Context
-import com.entin.streetmusic.util.firebase.constant.HOUR_ONE_MLS
 import com.entin.streetmusic.util.user.UserSession
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Suppress("unused")
-@Singleton
-class TimeUtil @Inject constructor(@ApplicationContext private val context: Context) {
+class TimeUtil(context: Context) {
 
     private val userPref = UserSession(context)
 
@@ -95,3 +90,9 @@ class TimeUtil @Inject constructor(@ApplicationContext private val context: Cont
         getCurrentUnixTimeMillisecondsWithDifference() - HOUR_ONE_MLS
 
 }
+
+/**
+ * 1 Hour in mls
+ */
+
+const val HOUR_ONE_MLS: Long = 3600000L
