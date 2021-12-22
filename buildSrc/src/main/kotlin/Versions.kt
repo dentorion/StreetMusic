@@ -3,10 +3,10 @@ object Versions {
     /**
      * Base 
      */
-    const val coreKtx = "1.6.0"
-    const val appcompat = "1.3.1"
+    const val coreKtx = "1.7.0"
+    const val appcompat = "1.4.0"
     const val material = "1.4.0"
-    const val lifecycle = "2.3.1"
+    const val lifecycle = "2.4.0"
 
     const val jUnit = "4.13.2"
     const val jUnitTest = "1.1.3"
@@ -18,7 +18,7 @@ object Versions {
      */
     const val main = "2.38.1"
     const val compile = "2.38.1"
-    const val navigation = "1.0.0-alpha03"
+    const val navigation = "1.0.0-beta01"
 
     /**
      * Retrofit + GSON
@@ -30,20 +30,19 @@ object Versions {
     /**
      * Compose
      */
-    const val composeActivity = "1.3.1"
-    const val composeUi = "1.1.0-alpha02"
-    const val composeMaterial = "1.1.0-alpha02"
-    const val composeUiTooling = "1.1.0-alpha02"
+    const val composeActivity = "1.4.0"
+    const val composeUi = "1.0.5"
+    const val composeMaterial = "1.0.5"
+    const val composeUiTooling = "1.0.5"
 
-    const val composeCoil = "1.3.2"
-
+    const val composeCoil = "1.4.0"
 
     /**
      * Accompanist
      */
-    const val permissions = "0.18.0"
-    const val insets = "0.18.0"
-    const val systemUi = "0.18.0"
+    const val permissions = "0.21.4-beta"
+    const val insets = "0.21.4-beta"
+    const val systemUi = "0.21.4-beta"
     const val animation = "0.21.2-beta"
 
     /**
@@ -56,7 +55,7 @@ object Versions {
     /**
      * Firebase
      */
-    const val bom = "29.0.0"
+    const val bom = "29.0.3"
     const val firebaseKtx = "23.0.3"
     const val coroutines = "1.5.1"
     const val crashlytics = "18.2.1"

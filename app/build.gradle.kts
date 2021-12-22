@@ -11,8 +11,6 @@ plugins {
     // Firebase
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
-
 }
 
 android {
@@ -52,7 +50,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.3"
+        kotlinCompilerExtensionVersion = "1.0.5"
     }
 }
 
@@ -112,7 +110,6 @@ dependencies {
         implementation(crashlytics)
         implementation(analytics)
         implementation(firebaseStorageKtx)
-        implementation(performance)
     }
 
     Dependencies.room.apply {
