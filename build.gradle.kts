@@ -14,7 +14,7 @@ buildscript {
         // GMS
         classpath("com.google.gms:google-services:${Android.googleServicesVersion}")
         // Secrets
-        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.0")
+        classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:${Android.secret}")
         // Firebase
         classpath("com.google.firebase:firebase-crashlytics-gradle:${Android.crashlytics}")
     }

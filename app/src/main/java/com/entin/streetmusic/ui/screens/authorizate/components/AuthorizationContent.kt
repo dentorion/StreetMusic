@@ -56,7 +56,11 @@ fun AuthorizationContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             val context = LocalContext.current
-            val token = stringResource(R.string.default_web_client_id)
+            /**
+             * Can show error Unresolved reference: default_web_client_id
+             * But works ok.
+             */
+            val token = stringResource(id = R.string.default_web_client_id)
 
             // Logo
             AuthBigImage(modifier = Modifier.weight(1f))

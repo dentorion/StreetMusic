@@ -3,7 +3,6 @@ package com.entin.streetmusic.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -44,11 +43,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var timeUtil: TimeUtil
 
-    @InternalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalCoilApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalPermissionsApi
+    @OptIn(InternalCoroutinesApi::class, androidx.compose.animation.ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)

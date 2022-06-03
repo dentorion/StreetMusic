@@ -60,7 +60,6 @@ class PermissionsViewModel @Inject constructor(
         }
     }
 
-    private fun checkAddress(
-        userAddress: Pair<String, String>
-    ): Boolean = userAddress.first.isNotEmpty() && userAddress.second.isNotEmpty()
+    private fun checkAddress(userAddress: Pair<String, String>): Boolean =
+        userAddress.first.isNotEmpty() && userAddress.second.isNotEmpty()
 }

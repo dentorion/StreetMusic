@@ -8,8 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.entin.streetmusic.ui.screens.permissions.permissions.AskPermissions
-import com.entin.streetmusic.ui.screens.permissions.permissions.HasPermission
 import com.entin.streetmusic.ui.screens.permissions.permissions.ErrorPermissions
+import com.entin.streetmusic.ui.screens.permissions.permissions.HasPermission
 import com.entin.streetmusic.ui.screens.start.components.BackgroundImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -42,17 +42,20 @@ fun Permissions(
          * - message for declined permissions
          */
         when {
-            mapPermissionState.hasPermission -> HasPermission(
-                navToAuthorization = navToAuthorization,
-                navToCityConcerts = navToCityConcerts,
-                uiState = viewModel.uiStatePermissions,
-                getUserInfo = viewModel::getUserInfo,
-            )
-
-            mapPermissionState.shouldShowRationale ||
-                    !mapPermissionState.permissionRequested -> AskPermissions(mapPermissionState)
-
-            else -> ErrorPermissions()
+            mapPermissionState.hasPermission -> {
+                HasPermission(
+                    navToAuthorization = navToAuthorization,
+                    navToCityConcerts = navToCityConcerts,
+                    uiState = viewModel.uiStatePermissions,
+                    getUserInfo = viewModel::getUserInfo,
+                )
+            }
+            mapPermissionState.shouldShowRationale || !mapPermissionState.permissionRequested -> {
+                AskPermissions(mapPermissionState)
+            }
+            else -> {
+                ErrorPermissions()
+            }
         }
     }
 }

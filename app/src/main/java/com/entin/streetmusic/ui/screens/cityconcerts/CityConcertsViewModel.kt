@@ -42,7 +42,7 @@ class CityConcertsViewModel @Inject constructor(
     val userCity = repository.getCurrentCity()
 
     /**
-     * Initial
+     * Invokes on Initial got by composable function
      * Get actual "concerts" in city, styles = all
      */
     fun getConcertsActualCity() = viewModelScope.launch {

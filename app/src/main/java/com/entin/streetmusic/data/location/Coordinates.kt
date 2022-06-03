@@ -22,9 +22,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class Coordinates @Inject constructor(@ApplicationContext private val context: Context) {
 
     @ExperimentalCoroutinesApi

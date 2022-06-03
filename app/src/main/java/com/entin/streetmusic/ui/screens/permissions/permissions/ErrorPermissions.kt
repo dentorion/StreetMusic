@@ -39,7 +39,7 @@ fun ErrorPermissions() {
             shape = StreetMusicTheme.shapes.medium
         ) {
             Text(
-                text = stringResource(id = R.string.need_permission_button),
+                text = stringResource(id = R.string.need_permission_button).uppercase(),
                 style = StreetMusicTheme.typography.buttonText,
             )
         }

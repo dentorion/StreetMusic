@@ -14,23 +14,30 @@ class CityConcertsRepositoryImpl @Inject constructor(
     private val remoteSource: RemoteSource,
 ) : CityConcertsRepository {
 
-    // Firebase - Get actual concerts in city with all styles of music
-    // Business manipulations with data
+    /**
+     * Firebase - Get actual concerts in city with all styles of music
+     */
     override suspend fun getConcertsActualCity(city: String): List<ConcertDomain> {
         return remoteSource.firebaseDb().sortedConcerts().getConcertsActualCity(city)
             .sortedByDescending { it.create }
             .toList()
     }
 
-    // Firebase - Get expired concerts in city with all styles of music
+    /**
+     * Firebase - Get expired concerts in city with all styles of music
+     */
     override suspend fun getConcertsExpiredCityTime(city: String): List<ConcertDomain> =
         remoteSource.firebaseDb().sortedConcerts().getConcertsExpiredCityTime(city)
 
-    // Firebase - Get expired concerts in city with manual cancellation
+    /**
+     * Firebase - Get expired concerts in city with manual cancellation
+     */
     override suspend fun getConcertsExpiredCityCancellation(city: String): List<ConcertDomain> =
         remoteSource.firebaseDb().sortedConcerts().getConcertsExpiredCityCancellation(city)
 
-    // Firebase - Get actual concerts in city with concrete style of music
+    /**
+     * Firebase - Get actual concerts in city with concrete style of music
+     */
     override suspend fun getConcertsActualCityStyle(
         city: String,
         type: MusicType
@@ -38,15 +45,19 @@ class CityConcertsRepositoryImpl @Inject constructor(
         remoteSource.firebaseDb().sortedConcerts().getConcertsActualCityStyle(city, type)
             .sortedByDescending { it.create }
 
-    // Firebase - Get expired concerts in city with concrete style of music
+    /**
+     * Firebase - Get expired concerts in city with concrete style of music
+     */
     override suspend fun getConcertsExpiredCityStyle(
         city: String,
         type: MusicType
     ): List<ConcertDomain> =
         remoteSource.firebaseDb().sortedConcerts().getConcertsExpiredCityStyle(city, type)
 
-    // Firebase - Get expired concerts in city with concrete style of music
-    // and with manual cancellation
+    /**
+     * Firebase - Get expired concerts in city with concrete style of music
+     * and with manual cancellation
+     */
     override suspend fun getConcertsExpiredCityStyleCancellation(
         city: String,
         type: MusicType
@@ -54,7 +65,9 @@ class CityConcertsRepositoryImpl @Inject constructor(
         remoteSource.firebaseDb().sortedConcerts()
             .getConcertsExpiredCityStyleCancellation(city, type)
 
-    // Save concerts to show on map as markers
+    /**
+     * Save concerts to show on map as markers
+     */
     override fun setOnlineConcerts(concerts: List<ConcertDomain>) {
         val shortConcerts: List<ShortConcertForMap> = concerts.map {
             ShortConcertForMap(
@@ -72,6 +85,9 @@ class CityConcertsRepositoryImpl @Inject constructor(
         localSource.userSession().setOnlineConcerts(concertsGson)
     }
 
+    /**
+     * Get current country
+     */
     override fun getCurrentCity() =
         localSource.userSession().getCity()
 }

@@ -17,7 +17,8 @@ class PermissionsRepositoryImpl @Inject constructor(
 ) : PermissionsRepository {
 
     // Google Cloud Services - Get Coordinates
-    @ExperimentalCoroutinesApi
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getUserLocation(): Flow<Location> =
         remoteSource.googleCloudFunctions().coordinates().requestLocation()
 
